@@ -9,7 +9,11 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "gsap": "^3.10.4",
+    "jquery": "^3.6.0",
+    "scrollmagic": "^2.0.8",
     "vue": "^3.2.13",
+    "vue-glitched-writer": "^1.2.2",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },
