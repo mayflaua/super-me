@@ -1,36 +1,37 @@
 <template>
   <main class="content">
-    <nav class="menu" v-if="helloAnimationDone">
-      <div class="menu__list">
-        <glitched-writer
-          text="обо мне"
-          tag="div"
-          class="menu__list-item"
-          @click="goTo('about')"
-          preset="cosmic"
-          :options="menuAppearingOptions"
-          appear
-        />
-        <glitched-writer
-          text="проекты"
-          tag="div"
-          class="menu__list-item"
-          @click="goTo('projects')"
-          preset="cosmic"
-          :options="menuAppearingOptions"
-          appear
-        />
-        <glitched-writer
-          text="связаться"
-          tag="div"
-          class="menu__list-item"
-          @click="goTo('contact')"
-          preset="cosmic"
-          :options="menuAppearingOptions"
-          appear
-        />
-      </div>
-    </nav>
+    <transition name="fade">
+      <header class="menu" v-if="helloAnimationDone">
+        <nav class="menu__list">
+          <glitched-writer
+            text="обо мне"
+            tag="div"
+            class="menu__list-item"
+            @click="goTo('about')"
+            preset="cosmic"
+            :options="menuAppearingOptions"
+            appear
+          />
+          <glitched-writer
+            text="проекты"
+            tag="div"
+            class="menu__list-item"
+            @click="goTo('projects')"
+            preset="cosmic"
+            :options="menuAppearingOptions"
+            appear
+          />
+          <glitched-writer
+            text="связаться"
+            tag="div"
+            class="menu__list-item"
+            @click="goTo('contact')"
+            preset="cosmic"
+            :options="menuAppearingOptions"
+            appear
+          />
+        </nav></header
+    ></transition>
     <section class="hello" id="hello">
       <glitched-writer
         text="Привет. "
@@ -47,6 +48,7 @@
         appear
       />
       <glitched-writer
+        tag="div"
         text="Познакомимся?"
         class="hello__title"
         preset="encrypted"
@@ -54,22 +56,69 @@
         :options="{ delay: 4000, interval: 80 }"
         appear
       />
-      <transition name="arrow-fade">
-        <svg class="hello__arrow" v-show="helloAnimationDone">
+      <!-- slide down arrows -->
+      <transition name="fade">
+        <svg
+          class="hello__arrow"
+          v-show="helloAnimationDone"
+          @click="goTo('about')"
+        >
           <path d="M0 0 L30 32 L60 0"></path>
           <path d="M0 20 L30 52 L60 20"></path>
           <path d="M0 40 L30 72 L60 40"></path></svg
       ></transition>
+      <!-- background particles -->
+      <transition name="fade">
+        <div class="particles" v-show="helloAnimationDone">
+          <div data-depth="0.1" class="particle1"></div>
+          <div data-depth="0.2" class="particle2"></div>
+          <div data-depth="0.3" class="particle3"></div></div
+      ></transition>
+      <!-- background gradient -->
+      <transition name="fade"
+        ><div class="hello__bg" v-show="helloAnimationDone"></div
+      ></transition>
     </section>
+
     <section class="about" id="about">
-      <div class="card" v-for="card in cards" :key="card.title">
-        <div class="card__head">{{ card.title }}</div>
-        <div class="card__content">
-          {{ card.text }}
+      <div class="about__main">
+        <div class="about__basics">
+          <p class="basics__title">
+            Frontend-разработчик с небольшим опытом, но с огромным энтузиазмом.
+          </p>
+          <p class="basics__subtitle">
+            Стараюсь делать полезные, красивые и фунцкиональные веб-приложения.
+            Использую Vue 3
+          </p>
+        </div>
+        <div class="about__cards">
+          <div class="card" v-for="(card, i) in cards" :key="i">
+            <div class="card__head" @click="showCard(i)">{{ card.title }}</div>
+            <div class="card__content" v-html="card.text.join(`<br />`)"></div>
+          </div>
         </div>
       </div>
+      <div class="about__quote">
+        <p class="about__quote-text-wrapper">
+          <span class="about__quote-text about__quote-text--upper"
+            >делай то, что любишь</span
+          >
+        </p>
+        <div class="about__quote-divider"></div>
+        <p class="about__quote-text-wrapper">
+          <span class="about__quote-text about__quote-text--lower"
+            >люби то, что делаешь</span
+          >
+        </p>
+      </div>
+      <!-- background gradient -->
+      <transition name="fade"
+        ><div class="about__bg" v-show="helloAnimationDone"></div
+      ></transition>
     </section>
+
     <section class="projects" id="projects">projects</section>
+
     <section class="contact" id="contact">contact</section>
   </main>
 </template>
@@ -80,6 +129,7 @@ import GlitchedWriter from "vue-glitched-writer";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import ScrollTo from "gsap/ScrollToPlugin";
+import Parallax from "parallax-js";
 gsap.registerPlugin(ScrollTrigger, ScrollTo);
 
 export default {
@@ -92,24 +142,35 @@ export default {
 
       cards: [
         {
-          title: "Кто я?",
-          text: "Надеюсь, вы помните, кем я представился? Если нет, то меня зовут Даниил, мне 21 год, из которых программированию я посвятил около трети. Из Нижегородской области я перебрался в Чебоксары, где и нахожусь сейчас.",
+          title: "Образование",
+          text: [
+            "Сдав ЕГЭ в 2018 году, я поступил в Казань (КИУ) на направление прикладной информатики. Буду честен, мне не понравилось. Именно поэтому после первой сессии я бросил учебу в ВУЗе. Сейчас все открытые источники информации - мои друзья на каждый день :)",
+          ],
         },
         {
           title: "Чем я занимаюсь?",
-          text: "Frontend разработкой я начал заниматься относительно недавно. Я понял, что работа поваром перестала интересовать как то, на что я готов тратить время силы.",
+          text: [
+            "Frontend разработкой я начал заниматься относительно недавно. В свободное от работы время я предпочитаю пешие и велопрогулки. Так же стараюсь поддерживать в тонусе тело и голову - занимаюсь дома и занимаюсь самообразованием, не только в направлении разработки.",
+          ],
         },
         {
-          title: "Образование",
-          text: "Сдав ЕГЭ в 2018 году, я поступил в Казань (КИУ) на направление прикладной информатики. Буду честен, мне не понравилось. Именно поэтому после первой сессии я бросил учебу в ВУЗе. Сейчас все открытые (и не очень) источники информации - мои друзья на каждый день :)",
+          title: "Цели",
+          text: [
+            "Я хочу попасть в команду единомышленников, которые поделятся бесценным опытом. Общая цель - стать полноценным Frontend разработичком с большим опытом.",
+          ],
         },
         {
-          title: "Чего я хочу?",
-          text: "Я хочу попасть в команду единомышленников, которые поделятся бесценным опытом. Общая цель - стать полноценным Frontend разработичком с большим опытом.",
+          title: "Soft skills",
+          text: [
+            "Технологии, которые я продолжаю изучать - HTML, CSS (SCSS), JS (es6+), Vue 3 (Vuex, Vue router), Git Решения, которых я коснулся - Element-Plus, kaboom.js, GSAP, SVG, jQuery, PHP8",
+          ],
         },
         {
           title: "Hard skills",
-          text: "Технологии, которые я продолжаю изучать - HTML, CSS, JS (es6+), Vue 3 (Vuex, Vue router) Решения, которых я коснулся - Element-Plus, kaboom.js, GSAP, SVG, jQuery, PHP8",
+          text: [
+            "Технологии, которые я продолжаю изучать - HTML, CSS (SCSS), JS (es6+), Vue 3 (Vuex, Vue router), Git",
+            "Решения, которых я коснулся - Element-Plus, kaboom.js, GSAP, SVG, jQuery, PHP8",
+          ],
         },
       ],
     };
@@ -119,6 +180,103 @@ export default {
   },
 
   methods: {
+    applyAboutAnimations() {
+      gsap.fromTo(
+        ".basics__title",
+        {
+          y: -150,
+          opacity: 0,
+          color: "transparent",
+        },
+        {
+          y: 0,
+          opacity: 1,
+          color: "white",
+
+          scrollTrigger: {
+            trigger: "#about",
+            start: "top bottom",
+            end: "650px bottom",
+            scrub: true,
+          },
+        }
+      );
+      gsap.fromTo(
+        ".basics__subtitle",
+        {
+          y: -150,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+
+          scrollTrigger: {
+            trigger: "#about",
+            start: "50px bottom",
+            end: "700px bottom",
+            scrub: true,
+          },
+        }
+      );
+    },
+
+    applyAboutQuoteAnimations() {
+      gsap.fromTo(
+        ".about__quote-text--upper",
+        {
+          y: 80,
+          opacity: 0.6,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          ease: "power1.inOut",
+          scrollTrigger: {
+            trigger: "#about",
+            start: "60% bottom",
+            end: "60% center",
+            scrub: true,
+          },
+        }
+      );
+      gsap.fromTo(
+        ".about__quote-text--lower",
+        {
+          y: -80,
+          opacity: 0.6,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          ease: "power1.inOut",
+          scrollTrigger: {
+            trigger: "#about",
+            start: "80% bottom",
+            end: "80% center",
+            scrub: true,
+          },
+        }
+      );
+      gsap.fromTo(
+        ".about__quote-divider",
+        {
+          width: 0,
+        },
+        {
+          width: "35%",
+          ease: "none",
+
+          scrollTrigger: {
+            trigger: "#about",
+            start: "25% center",
+            end: "60% 80%",
+            scrub: true,
+          },
+        }
+      );
+    },
+
     goTo(section) {
       gsap.to(window, {
         duration: 1,
@@ -127,52 +285,22 @@ export default {
       this.menuVisible = false;
     },
 
-    applyCardAnimations() {
-      gsap.fromTo(
-        ".card",
-        {
-          "min-height": "0",
-          "max-height": "0",
-        },
-        {
-          "min-height": "150px",
-          "max-height": "300px",
-          "box-shadow": "0 0 10px 5px rgba($purple, 0.4)",
-
-          scrollTrigger: {
-            trigger: "#about",
-            start: "50px bottom",
-            end: "center center",
-            scrub: 1,
-          },
-        }
-      );
-      gsap.fromTo(
-        ".card__content",
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 1,
-
-          scrollTrigger: {
-            trigger: "#about",
-            start: "150px center",
-            end: "center center",
-            scrub: 1,
-          },
-        }
-      );
-    },
+    showCard(i) {},
   },
 
   mounted() {
-    this.applyCardAnimations();
+    this.applyAboutAnimations();
+    this.applyAboutQuoteAnimations();
+    let parallax = new Parallax(document.querySelector(".particles"), {
+      relativeInput: false,
+    });
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import "@/style/particles.scss";
+
 /* neon flickering animation */
 @keyframes flicker {
   0%,
@@ -196,6 +324,30 @@ export default {
       0 0 55px rgba(144, 99, 205, 0.5), 0 0 80px rgba(144, 99, 205, 0.5);
   }
 }
+@keyframes flickerText {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    text-shadow: 0 0 2px rgba(144, 99, 205, 0.5),
+      0 0 4px rgba(144, 99, 205, 0.5), 0 0 8px rgba(144, 99, 205, 0.5),
+      0 0 15px rgba(144, 99, 205, 0.5), 0 0 30px rgba(144, 99, 205, 0.5),
+      0 0 40px rgba(144, 99, 205, 0.5), 0 0 70px rgba(144, 99, 205, 0.5),
+      0 0 100px rgba(144, 99, 205, 0.5);
+  }
+  20%,
+  24%,
+  55% {
+    text-shadow: 0 0 1px rgba(144, 99, 205, 0.5),
+      0 0 2px rgba(144, 99, 205, 0.5), 0 0 5px rgba(144, 99, 205, 0.5),
+      0 0 11px rgba(255, 255, 255, 0.5), 0 0 20px rgba(144, 99, 205, 0.5),
+      0 0 30px rgba(144, 99, 205, 0.5), 0 0 55px rgba(144, 99, 205, 0.5),
+      0 0 80px rgba(144, 99, 205, 0.5);
+  }
+}
 
 /* slide down arrow animations */
 @keyframes arrow {
@@ -213,16 +365,20 @@ export default {
   }
 }
 
-.arrow-fade-enter-active {
-  transition: opacity 3s ease;
+.fade-enter-active {
+  transition: opacity 1s ease;
 }
-.arrow-fade-enter-from {
+.fade-enter-from {
   opacity: 0;
 }
 
 /* main style */
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 ::selection {
@@ -235,6 +391,7 @@ export default {
   font-family: "Montserrat", sans-serif;
   background: $dark-color;
   color: white;
+  overflow: auto;
 }
 
 .menu {
@@ -242,6 +399,7 @@ export default {
   position: fixed;
   width: 100%;
   height: 50px;
+  z-index: 99;
 
   font-size: clamp(2vh, 16px, 3vw);
 
@@ -280,6 +438,7 @@ export default {
 
 /* hello section style */
 .hello {
+  position: relative;
   padding-top: 40vh;
   width: 100%;
   min-height: 100vh;
@@ -287,11 +446,60 @@ export default {
   font-size: 5vw;
   font-weight: 600;
 
-  &__title:nth-child(3) {
-    display: block;
+  overflow: hidden;
+
+  &__bg {
+    pointer-events: none;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient($dark-color 60%, rgb(39, 36, 85));
+    mix-blend-mode: lighten;
+  }
+
+  // particles
+  .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    & .particle1,
+    & .particle2,
+    & .particle3 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: -$w + px;
+      right: 0;
+      background-image: $grad;
+      background-size: $w + px $w + px;
+      animation: particles $speed linear infinite;
+    }
+    & .particle3 {
+      margin-left: -$w/3 + px;
+      opacity: 0.4;
+      animation-duration: $speed * 2;
+      filter: blur(3px);
+    }
+    & .particle2 {
+      margin-left: -$w/2 + px;
+      opacity: 0.65;
+      animation-duration: $speed * 3;
+      filter: blur(1.5px);
+    }
+    @keyframes particles {
+      to {
+        transform: translateY(-$w + px);
+      }
+    }
   }
 
   &__arrow {
+    cursor: pointer;
     width: 60px;
     height: 72px;
     position: absolute;
@@ -320,46 +528,172 @@ export default {
 
 /* about section style */
 .about {
+  position: relative;
   width: 100%;
   min-height: 100vh;
-  background-color: $default-color;
+  background: $dark-color;
   padding: 60px 0;
-  display: flex;
-  flex-direction: column;
-  & .card {
-    width: 80%;
-    margin: 15px auto;
-    border: 2px solid $purple;
+  &__main {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
 
-    &__head {
-      width: 100%;
-      height: 50px;
-      line-height: 50px;
-      text-indent: 15px;
-      background-color: $purple;
+  &__bg {
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(rgb(39, 36, 85), $dark-color);
+    mix-blend-mode: lighten;
+  }
 
-      font-size: 24px;
+  &__basics {
+    width: 45%;
+    height: 100%;
+    & .basics__title {
+      font-size: clamp(32px, 3vw, 48px);
       font-weight: 600;
     }
 
-    &__content {
-      padding: 5px 10px;
-      font-size: 2vh;
+    & .basics__subtitle {
+      font-size: clamp(22px, 2vw, 34px);
       font-weight: 500;
-      overflow: hidden;
+    }
+  }
+  &__cards {
+    width: 45%;
+
+    .card {
+      width: 100%;
+      margin: 15px auto;
+      border: 2px solid $purple;
+
+      &__head {
+        position: relative;
+        transition: all 2s ease;
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        text-align: left;
+        text-indent: 15px;
+        cursor: pointer;
+
+        font-size: 24px;
+        font-weight: 600;
+
+        &:after {
+          transition: 0.5s ease-in-out;
+          position: absolute;
+          content: "";
+          top: 0;
+          right: 0;
+          width: 0;
+          height: 100%;
+          background-color: $purple;
+
+          mix-blend-mode: lighten;
+        }
+
+        &:hover {
+          &:after {
+            width: 100%;
+          }
+          & ~ .card__content {
+            max-height: 250px;
+            padding: 20px 10px;
+            opacity: 1;
+          }
+        }
+      }
+
+      &__content {
+        transition: padding 0.7s ease, max-height 0.7s ease-out,
+          opacity 1s linear;
+        font-size: 18px;
+        padding: 0 10px;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+
+        &:hover {
+          max-height: 250px;
+          padding: 20px 10px;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  &__quote {
+    margin-top: 20vh;
+    width: 100%;
+
+    &-divider {
+      margin: 0 auto;
+      height: 5px;
+      background: $purple;
+      animation: flicker 1s infinite;
+    }
+
+    &-text {
+      &-wrapper {
+        overflow: hidden;
+        margin-block-start: 0;
+        margin-block-end: 0;
+      }
+      margin: 0 auto;
+      display: block;
+      text-align: center;
+      font-size: clamp(32px, 3vw, 48px);
+      text-transform: uppercase;
     }
   }
 }
 
+/* projects section style */
 .projects {
   width: 100%;
   min-height: 100vh;
-  background-color: $light-color;
+  background-color: $default-color;
 }
 
+/* contact section style */
 .contact {
   width: 100%;
   min-height: 100vh;
   background-color: $purple;
+}
+
+/* media queries */
+@media (max-width: 768px) {
+  .about {
+    &__main {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__basics {
+      width: 90%;
+      text-align: center;
+    }
+
+    &__cards {
+      width: 90%;
+    }
+
+    & .card__head {
+      font-size: 20px;
+      text-align: center;
+      text-indent: none;
+    }
+
+    & .card__content {
+      font-size: 16px;
+    }
+  }
 }
 </style>
