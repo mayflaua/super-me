@@ -128,19 +128,26 @@
           <div class="project-card__content-title">{{ project.title }}</div>
           <div class="project-card__content-desc">{{ project.desc }}</div>
           <div class="project-card__buttons">
-            <card-button
-              text="подробнее"
-              :modal-title="project.title"
-              :modal-desc="project.fullDesc"
-              :modal-images="project.images"
-            />
-            <card-button
-              text="перейти"
-              :modal-title="project.title"
-              :modal-desc="project.fullDesc"
-              :modal-images="project.images"
-              link="https://mayflaua.github.io/"
-            />
+            <a class="project-card__button showmore">
+              <div
+                class="project-card__button-text"
+                @click="
+                  currentDescIndex !== num
+                    ? showDescription(num)
+                    : hideDescription()
+                "
+              >
+                <span v-if="currentDescIndex != num">подробнее</span>
+                <span v-else>закрыть</span>
+              </div> </a
+            ><a
+              class="project-card__button"
+              :href="project.link"
+              target="_blank"
+              v-if="project.link"
+            >
+              <div class="project-card__button-text">перейти</div>
+            </a>
           </div>
         </div>
       </div>
@@ -160,17 +167,19 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import ScrollTo from "gsap/ScrollToPlugin";
 import Parallax from "parallax-js";
 import PagePreloader from "@/components/PagePreloader";
-import CardButton from "@/components/CardButton";
 gsap.registerPlugin(ScrollTrigger, ScrollTo);
+
+let tl = gsap.timeline({ paused: true });
 
 export default {
   components: {
     GlitchedWriter,
     PagePreloader,
-    CardButton,
   },
   data() {
     return {
+      tl: gsap.timeline({ paused: true }),
+      currentDescIndex: -1,
       helloAnimationDone: false,
       menuAppearingOptions: {
         delay: [200, 1000],
@@ -214,11 +223,11 @@ export default {
       projects: [
         {
           title: "Портфолио",
-          desc: "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибки и плохими решения.",
-          link: "link",
+          desc: "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибками и неудачными решениями.",
+          link: "https://mayflaua.github.io",
 
           fullDesc: [
-            "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибки и плохими решения.",
+            "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибками и неудачными решениями.",
             "Упор был на практику верстки, дизайн был взят из Figma. Начинал еще не зная JS совсем, начав изучать его дойдя до реализации змейки на главной странице. Код был взят из открытых источников, после чего был изменен и доработан под макет.",
             "Между первым и последним коммитом - 28 дней.",
           ],
@@ -228,6 +237,17 @@ export default {
             "portfolio3.jpg",
             "portfolio4.jpg",
           ],
+        },
+        {
+          title: "Генератор паролей",
+          desc: "Чтобы углубиться в JavaScript, я решил написать генератор паролей. Но сложность была не в алгоритме генерации, а в анимации генерации пароля.",
+
+          fullDesc: [
+            "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибки и плохими решения.",
+            "Упор был на практику верстки, дизайн был взят из Figma. Начинал еще не зная JS совсем, начав изучать его дойдя до реализации змейки на главной странице. Код был взят из открытых источников, после чего был изменен и доработан под макет.",
+            "Между первым и последним коммитом - 28 дней.",
+          ],
+          images: ["password.gif"],
         },
       ],
     };
@@ -329,6 +349,65 @@ export default {
           },
         }
       );
+    },
+
+    applyDescAnimation(index) {
+      tl = gsap.timeline();
+      this.currentDescIndex = index;
+      let card = document.querySelector(
+        `.project-card:nth-child(${index + 1})`
+      );
+      tl.to(window, {
+        duration: 0.6,
+        ease: "ease",
+
+        scrollTo: {
+          y: card.getBoundingClientRect().top + window.scrollY - 40,
+        },
+      })
+        .to(card, {
+          duration: 0.01,
+          "z-index": 100,
+          background: "#252525",
+          ease: "none",
+        })
+        .to(card, {
+          top: "-40px",
+          position: "fixed",
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          duration: 1,
+          ease: "power3.out",
+        });
+    },
+
+    showDescription(index) {
+      this.setScrolling(false);
+      this.applyDescAnimation(index);
+      tl.play();
+      console.log("showing element #" + (index + 1));
+    },
+
+    setScrolling(bool) {
+      // disable scrolling if FALSE passed as argument
+      if (!bool) {
+        console.log("blocked scrolling");
+        document.body.style.overflow = "hidden";
+      } else {
+        console.log("unblocked scrolling");
+        document.body.style.overflow = "auto";
+      }
+    },
+
+    hideDescription() {
+      console.log("hiding");
+      tl.reverse().then(() => {
+        this.currentDescIndex = null;
+        this.setScrolling(true);
+        tl = null;
+        console.log("timeline killed");
+      });
     },
 
     goTo(section) {
@@ -722,25 +801,67 @@ html {
 
 /* projects section style */
 .projects {
+  position: relative;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient($dark-color, $default-color);
+  background: $dark-color;
   padding: 60px 0 0 0;
 
   & .project-card {
     display: flex;
-    margin: 0 auto;
+    margin: 40px auto;
     width: 100%;
     min-height: 100px;
 
     &__buttons {
       display: flex;
       margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    &__button {
+      box-sizing: border-box;
+      position: relative;
+      cursor: pointer;
+      display: block;
+
+      width: 180px;
+      margin: 4px 8px 0 0;
+      height: 40px;
+      background-color: transparent;
+      border: 2px solid #9063cd;
+      &:after {
+        pointer-events: none;
+        transition: 0.5s ease-in-out;
+        content: "";
+        mix-blend-mode: lighten;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 100%;
+        background: $purple;
+      }
+      &-text {
+        display: block;
+        box-sizing: border-box;
+        text-decoration: none;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 40px;
+      }
+
+      &:hover:after {
+        width: 100%;
+      }
     }
 
     &__number {
-      margin-left: 4vw;
-      width: 40px;
+      margin: 0 0 0 4vw;
+      min-width: 35px;
       min-height: 100%;
       display: flex;
       align-items: center;
@@ -796,6 +917,15 @@ html {
 
     & .card__content {
       font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .button {
+    width: 120px;
+    &__text {
+      font-size: 14px;
     }
   }
 }
