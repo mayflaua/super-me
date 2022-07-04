@@ -1,4 +1,5 @@
 <template>
+  <!-- <transition name="fade"><page-preloader v-if="isLoading" /></transition> -->
   <main class="content">
     <transition name="fade">
       <header class="menu" v-if="helloAnimationDone">
@@ -39,6 +40,7 @@
         preset="encrypted"
         :options="{ delay: 1000, interval: 60 }"
         appear
+        v-if="!isLoading"
       />
       <glitched-writer
         text="Я Данил."
@@ -46,6 +48,7 @@
         preset="encrypted"
         :options="{ delay: 2500, interval: 60 }"
         appear
+        v-if="!isLoading"
       />
       <glitched-writer
         tag="div"
@@ -55,6 +58,7 @@
         @finish="helloAnimationDone = true"
         :options="{ delay: 4000, interval: 80 }"
         appear
+        v-if="!isLoading"
       />
       <!-- slide down arrows -->
       <transition name="fade">
@@ -93,7 +97,7 @@
         </div>
         <div class="about__cards">
           <div class="card" v-for="(card, i) in cards" :key="i">
-            <div class="card__head" @click="showCard(i)">{{ card.title }}</div>
+            <div class="card__head">{{ card.title }}</div>
             <div class="card__content" v-html="card.text.join(`<br />`)"></div>
           </div>
         </div>
@@ -117,7 +121,30 @@
       ></transition>
     </section>
 
-    <section class="projects" id="projects">projects</section>
+    <section class="projects" id="projects">
+      <div class="project-card" v-for="(project, num) in projects" :key="num">
+        <div class="project-card__number">{{ num + 1 }}</div>
+        <div class="project-card__content">
+          <div class="project-card__content-title">{{ project.title }}</div>
+          <div class="project-card__content-desc">{{ project.desc }}</div>
+          <div class="project-card__buttons">
+            <card-button
+              text="подробнее"
+              :modal-title="project.title"
+              :modal-desc="project.fullDesc"
+              :modal-images="project.images"
+            />
+            <card-button
+              text="перейти"
+              :modal-title="project.title"
+              :modal-desc="project.fullDesc"
+              :modal-images="project.images"
+              link="https://mayflaua.github.io/"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class="contact" id="contact">contact</section>
   </main>
@@ -125,20 +152,30 @@
 
 <script>
 /* eslint-disable no-unused-vars */
+/* eslint-disable vue/no-unused-components */
+
 import GlitchedWriter from "vue-glitched-writer";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import ScrollTo from "gsap/ScrollToPlugin";
 import Parallax from "parallax-js";
+import PagePreloader from "@/components/PagePreloader";
+import CardButton from "@/components/CardButton";
 gsap.registerPlugin(ScrollTrigger, ScrollTo);
 
 export default {
+  components: {
+    GlitchedWriter,
+    PagePreloader,
+    CardButton,
+  },
   data() {
     return {
       helloAnimationDone: false,
       menuAppearingOptions: {
         delay: [200, 1000],
       },
+      isLoading: true,
 
       cards: [
         {
@@ -173,10 +210,27 @@ export default {
           ],
         },
       ],
+
+      projects: [
+        {
+          title: "Портфолио",
+          desc: "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибки и плохими решения.",
+          link: "link",
+
+          fullDesc: [
+            "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибки и плохими решения.",
+            "Упор был на практику верстки, дизайн был взят из Figma. Начинал еще не зная JS совсем, начав изучать его дойдя до реализации змейки на главной странице. Код был взят из открытых источников, после чего был изменен и доработан под макет.",
+            "Между первым и последним коммитом - 28 дней.",
+          ],
+          images: [
+            "portfolio1.jpg",
+            "portfolio2.jpg",
+            "portfolio3.jpg",
+            "portfolio4.jpg",
+          ],
+        },
+      ],
     };
-  },
-  components: {
-    GlitchedWriter,
   },
 
   methods: {
@@ -264,7 +318,7 @@ export default {
           width: 0,
         },
         {
-          width: "35%",
+          width: "70%",
           ease: "none",
 
           scrollTrigger: {
@@ -282,18 +336,26 @@ export default {
         duration: 1,
         scrollTo: { y: `#${section}` },
       });
-      this.menuVisible = false;
     },
-
-    showCard(i) {},
+    // initialaze animations and interactions
+    initAll() {
+      this.applyAboutAnimations();
+      this.applyAboutQuoteAnimations();
+      let parallax = new Parallax(document.querySelector(".particles"), {
+        relativeInput: false,
+      });
+    },
   },
 
   mounted() {
-    this.applyAboutAnimations();
-    this.applyAboutQuoteAnimations();
-    let parallax = new Parallax(document.querySelector(".particles"), {
-      relativeInput: false,
-    });
+    document.onreadystatechange = () => {
+      if (document.readyState == "complete") {
+        setTimeout(() => {
+          this.initAll();
+          this.isLoading = false;
+        }, 0);
+      }
+    };
   },
 };
 </script>
@@ -365,10 +427,12 @@ export default {
   }
 }
 
-.fade-enter-active {
-  transition: opacity 1s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1.5s ease;
 }
-.fade-enter-from {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -470,6 +534,8 @@ html {
     & .particle1,
     & .particle2,
     & .particle3 {
+      will-change: transform;
+
       position: absolute;
       top: 0;
       left: 0;
@@ -658,7 +724,44 @@ html {
 .projects {
   width: 100%;
   min-height: 100vh;
-  background-color: $default-color;
+  background: linear-gradient($dark-color, $default-color);
+  padding: 60px 0 0 0;
+
+  & .project-card {
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 100px;
+
+    &__buttons {
+      display: flex;
+      margin-top: 12px;
+    }
+
+    &__number {
+      margin-left: 4vw;
+      width: 40px;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 28px;
+      font-weight: 600;
+      border-right: 5px solid $purple;
+    }
+
+    &__content {
+      margin: 0 4vw 0 15px;
+      width: calc(100% - 40px);
+
+      &-title {
+        font-size: 32px;
+        font-weight: 500;
+      }
+      &-desc {
+        margin: 15px 0 0 0;
+      }
+    }
+  }
 }
 
 /* contact section style */
