@@ -1,5 +1,5 @@
 <template>
-  <!-- <transition name="fade"><page-preloader v-if="isLoading" /></transition> -->
+  <transition name="fade"><page-preloader v-if="isLoading" /></transition>
   <main class="content">
     <transition name="fade">
       <header class="menu" v-if="helloAnimationDone">
@@ -253,6 +253,14 @@ export default {
     };
   },
 
+  computed: {
+    isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    },
+  },
+
   methods: {
     applyAboutAnimations() {
       gsap.fromTo(
@@ -420,9 +428,11 @@ export default {
     initAll() {
       this.applyAboutAnimations();
       this.applyAboutQuoteAnimations();
-      let parallax = new Parallax(document.querySelector(".particles"), {
-        relativeInput: false,
-      });
+      if (!this.isMobile) {
+        let parallax = new Parallax(document.querySelector(".particles"), {
+          relativeInput: false,
+        });
+      }
     },
   },
 
