@@ -55,7 +55,7 @@
         text="Познакомимся?"
         class="hello__title"
         preset="encrypted"
-        @finish="helloAnimationDone = true"
+        @finish="saidHello"
         :options="{ delay: 4000, interval: 80 }"
         appear
         v-if="!isLoading"
@@ -74,9 +74,9 @@
       <!-- background particles -->
       <transition name="fade">
         <div class="particles" v-show="helloAnimationDone">
-          <div data-depth="0.1" class="particle1"></div>
+          <div data-depth="0.1" class="particle1" v-if="!isMobile"></div>
           <div data-depth="0.2" class="particle2"></div>
-          <div data-depth="0.3" class="particle3"></div></div
+          <div data-depth="0.3" class="particle3" v-if="!isMobile"></div></div
       ></transition>
       <!-- background gradient -->
       <transition name="fade"
@@ -103,17 +103,17 @@
         </div>
       </div>
       <div class="about__quote">
-        <p class="about__quote-text-wrapper">
+        <div class="about__quote-text-wrapper">
           <span class="about__quote-text about__quote-text--upper"
-            >делай то, что любишь</span
-          >
-        </p>
-        <div class="about__quote-divider"></div>
-        <p class="about__quote-text-wrapper">
+            >делай то, что любишь
+          </span>
+          <div class="about__quote-divider"></div>
+        </div>
+        <div class="about__quote-text-wrapper">
           <span class="about__quote-text about__quote-text--lower"
             >люби то, что делаешь</span
           >
-        </p>
+        </div>
       </div>
       <!-- background gradient -->
       <transition name="fade"
@@ -179,7 +179,7 @@ export default {
   data() {
     return {
       tl: gsap.timeline({ paused: true }),
-      currentDescIndex: -1,
+      currentDescIndex: null,
       helloAnimationDone: false,
       menuAppearingOptions: {
         delay: [200, 1000],
@@ -315,9 +315,9 @@ export default {
           opacity: 1,
           ease: "power1.inOut",
           scrollTrigger: {
-            trigger: "#about",
-            start: "60% bottom",
-            end: "60% center",
+            trigger: "#projects",
+            start: "-10vh bottom",
+            end: "-30% center",
             scrub: true,
           },
         }
@@ -333,9 +333,9 @@ export default {
           opacity: 1,
           ease: "power1.inOut",
           scrollTrigger: {
-            trigger: "#about",
-            start: "80% bottom",
-            end: "80% center",
+            trigger: "#projects",
+            start: "-5% bottom",
+            end: "-20% center",
             scrub: true,
           },
         }
@@ -346,13 +346,13 @@ export default {
           width: 0,
         },
         {
-          width: "70%",
+          width: "100%",
           ease: "none",
 
           scrollTrigger: {
-            trigger: "#about",
-            start: "25% center",
-            end: "60% 80%",
+            trigger: "#projects",
+            start: "-60% center",
+            end: "-30% 60%",
             scrub: true,
           },
         }
@@ -386,7 +386,7 @@ export default {
           width: "100vw",
           height: "100vh",
           duration: 1,
-          ease: "power3.out",
+          ease: "power4.inOut",
         });
     },
 
@@ -418,10 +418,16 @@ export default {
       });
     },
 
+    saidHello() {
+      this.helloAnimationDone = true;
+      this.setScrolling(true);
+    },
+
     goTo(section) {
       gsap.to(window, {
         duration: 1,
         scrollTo: { y: `#${section}` },
+        ease: "power1.inOut",
       });
     },
     // initialaze animations and interactions
@@ -437,12 +443,12 @@ export default {
   },
 
   mounted() {
+    window.scrollY == 0 ? this.setScrolling(false) : null;
+
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
-        setTimeout(() => {
-          this.initAll();
-          this.isLoading = false;
-        }, 0);
+        this.initAll();
+        this.isLoading = false;
       }
     };
   },
@@ -518,7 +524,7 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 1.5s ease;
+  transition: opacity 1s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
@@ -625,7 +631,7 @@ html {
     & .particle3 {
       will-change: transform;
 
-      position: absolute;
+      position: absolute !important;
       top: 0;
       left: 0;
       bottom: -$w + px;
@@ -796,6 +802,8 @@ html {
 
     &-text {
       &-wrapper {
+        margin: 0 auto;
+        width: fit-content;
         overflow: hidden;
         margin-block-start: 0;
         margin-block-end: 0;
