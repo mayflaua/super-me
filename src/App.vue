@@ -316,15 +316,14 @@ export default {
           },
           {
             scrollTrigger: {
+              scrub: true,
               trigger: ".card:first-child",
               start: `${65 * index}px bottom`,
               end: `+=150px bottom`,
-              scrub: true,
             },
             borderWidth: 2,
             ease: "power2.inOut",
             width: "100%",
-            duration: 0.5,
           }
         );
       });
@@ -334,12 +333,11 @@ export default {
           gsap.to(overlay, {
             width: 0,
             ease: "power2.inOut",
-            duration: 0.5,
             scrollTrigger: {
-              trigger: ".card:first-child",
-              start: `${70 * index}px bottom`,
-              end: `+=200px bottom`,
               scrub: true,
+              trigger: ".card:first-child",
+              start: `${65 * index}px bottom`,
+              end: `+=250px bottom`,
             },
           });
         });
