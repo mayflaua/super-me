@@ -74,9 +74,9 @@
       <!-- background particles -->
       <transition name="fade">
         <div class="particles" v-show="helloAnimationDone">
-          <div data-depth="0.1" class="particle1" v-if="!isMobile"></div>
+          <div data-depth="0.3" class="particle1" v-if="!isMobile"></div>
           <div data-depth="0.2" class="particle2"></div>
-          <div data-depth="0.3" class="particle3" v-if="!isMobile"></div></div
+          <div data-depth="0.1" class="particle3" v-if="!isMobile"></div></div
       ></transition>
       <!-- background gradient -->
       <transition name="fade"
@@ -97,7 +97,10 @@
         </div>
         <div class="about__cards">
           <div class="card" v-for="(card, i) in cards" :key="i">
-            <div class="card__head">{{ card.title }}</div>
+            <div class="card__head">
+              {{ card.title }}
+              <div class="card__head-overlay"></div>
+            </div>
             <div class="card__content" v-html="card.text.join(`<br />`)"></div>
           </div>
         </div>
@@ -263,6 +266,7 @@ export default {
 
   methods: {
     applyAboutAnimations() {
+      // title animation
       gsap.fromTo(
         ".basics__title",
         {
@@ -283,6 +287,7 @@ export default {
           },
         }
       );
+      // subtitle animation
       gsap.fromTo(
         ".basics__subtitle",
         {
@@ -301,6 +306,43 @@ export default {
           },
         }
       );
+      // cards animation
+      document.querySelectorAll(".card").forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          {
+            width: 0,
+            borderWidth: 0,
+          },
+          {
+            scrollTrigger: {
+              trigger: ".card:first-child",
+              start: `${65 * index}px bottom`,
+              end: `+=150px bottom`,
+              scrub: true,
+            },
+            borderWidth: 2,
+            ease: "power2.inOut",
+            width: "100%",
+            duration: 0.5,
+          }
+        );
+      });
+      document
+        .querySelectorAll(".card__head-overlay")
+        .forEach((overlay, index) => {
+          gsap.to(overlay, {
+            width: 0,
+            ease: "power2.inOut",
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: ".card:first-child",
+              start: `${70 * index}px bottom`,
+              end: `+=200px bottom`,
+              scrub: true,
+            },
+          });
+        });
     },
 
     applyAboutQuoteAnimations() {
@@ -370,7 +412,7 @@ export default {
         ease: "ease",
 
         scrollTo: {
-          y: card.getBoundingClientRect().top + window.scrollY - 40,
+          y: card.getBoundingClientRect().top + window.scrollY - 50,
         },
       })
         .to(card, {
@@ -383,7 +425,7 @@ export default {
           top: "-40px",
           position: "fixed",
           left: 0,
-          width: "100vw",
+          width: "100%",
           height: "100vh",
           duration: 1,
           ease: "power4.inOut",
@@ -745,6 +787,15 @@ html {
 
         font-size: 24px;
         font-weight: 600;
+
+        &-overlay {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background: $purple;
+        }
 
         &:after {
           transition: 0.5s ease-in-out;
