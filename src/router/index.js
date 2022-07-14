@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainView from "@/views/MainView.vue";
 import ProjectPortfolio from "@/views/ProjectPortfolio.vue";
+import ProjectPassGen from "@/views/ProjectPassGen.vue";
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: "/portfolio",
     name: "portfolio",
     component: ProjectPortfolio,
+  },
+  {
+    path: "/passgen",
+    name: "passgen",
+    component: ProjectPassGen,
   },
 ];
 

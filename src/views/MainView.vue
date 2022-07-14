@@ -1,5 +1,8 @@
 <template>
+  <!-- FIXME: не рендерится если зайти через back без предзагрузки -->
+  <!-- пока что вставил релоад в page-reloader если пять сек грузится -->
   <main class="content">
+    <page-preloader v-if="isLoading" />
     <transition name="fade">
       <header class="menu" v-if="helloAnimationDone">
         <nav class="menu__list">
@@ -230,7 +233,7 @@ export default {
           link: "https://mayflaua.github.io",
         },
         {
-          route: "portfolio",
+          route: "passgen",
           title: "Генератор паролей",
           desc: "Чтобы углубиться в JavaScript, я решил написать генератор паролей. Но сложность была не в алгоритме генерации, а в анимации генерации пароля.",
         },

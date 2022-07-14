@@ -3,39 +3,32 @@
     <div class="overlays">
       <div class="overlay overlay1"></div>
       <div class="overlay overlay2">
-        <span class="overlay-text">HTML</span>
+        <span class="overlay-text">JS</span>
       </div>
       <div class="overlay overlay3">
-        <span class="overlay-text">CSS</span>
+        <span class="overlay-text">ГЕНЕРАТОР</span>
       </div>
-      <div class="overlay overlay4"><span class="overlay-text">JS</span></div>
+      <div class="overlay overlay4">
+        <span class="overlay-text">ПАРОЛЕЙ</span>
+      </div>
     </div>
     <div class="project">
-      <div class="project__title">Портфолио</div>
+      <div class="project__title">Генератор паролей</div>
       <div class="project__desc">
         <div class="project__desc-text">
-          Сайт выполнен в темно-синих цветах, в стилистике desktop
-          приложения.<br />
-          Проект был задуман и реализован с целью знакомства пользователя со
-          мной как с разработчиком.
+          JavaScript генератор паролей с визуализацией.
         </div>
         <div class="project__desc-images project__desc-images--first">
           <img
             class="project__desc-image"
-            src="@/assets/previews/portfolio1.jpg"
+            src="@/assets/previews/password.gif"
           />
-          <div class="project__desc-image-wrapper">
-            <img
-              class="project__desc-image project__desc-image--overlaying"
-              src="@/assets/previews/portfolio2.jpg"
-            />
-          </div>
         </div>
         <div class="project__desc-text">
-          Упор был на практику верстки, дизайн был взят из Figma. Начинал еще не
-          зная JS совсем, начав изучать его дойдя до реализации змейки на
-          главной странице. Код был взят из открытых источников, после чего был
-          изменен и доработан под макет.
+          В данном проекте идея реализовать анимацию возникла раньше идеи
+          генератора пароля.<br />Для генерации я использовал псевдо-случайные
+          числа с помощью Math, поэтому пароль не считается криптографически
+          безопасным.<br />
         </div>
       </div>
       <div class="project__desc-conclusions">
@@ -80,19 +73,19 @@ export default {
 
     whatILearnedList: [
       {
-        title: "Верстка по макету",
-        desc: "из Figma",
-        link: "https://www.figma.com/community/file/1100794861710979147",
+        title: "Взаимодействие с DOM с помощью JS",
+        desc: "Измененение стиля элемента в зависимости от контента (подсветка цифр)",
+        link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
       },
       {
-        title: "Взаимодействие с DOM с помощью JS",
-        desc: "Прослушивание событий, динамическое изменение контента",
-        link: "https://github.com/mayflaua/mayflaua.github.io/tree/master/script",
+        title: "Работа с вводимыми данными в JS",
+        desc: "для генерации пароля на основе выделенных опций",
+        link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
       },
       {
         title: "Работа с HTML Canvas в JS",
         desc: "в том числе динамическая отрисовка на основе вводимых данных пользователя",
-        link: "https://github.com/mayflaua/mayflaua.github.io/blob/master/script/snake.js",
+        link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
       },
     ],
   }),
@@ -109,7 +102,7 @@ export default {
       }
     },
     back() {
-      overlays.reverse().then(() => this.$router.go(-1));
+      overlays.reverse().then(() => this.$router.push("/"));
       this.setScrolling(false);
     },
     applyWhatILearnedAnimations() {
@@ -180,21 +173,10 @@ export default {
         duration: 0.5,
       });
     },
-    applyImageAnimation() {
-      gsap.from(".project__desc-image-wrapper", {
-        width: 0,
-        scrollTrigger: {
-          scrub: true,
-          trigger: ".project__desc-images",
-          start: "40% center",
-          end: "60% center",
-        },
-      });
-    },
+
     applyAnimations() {
       this.isAnimating = false;
       this.applyOverlayAnimation();
-      this.applyImageAnimation();
       this.applyWhatILearnedAnimations();
     },
   },
@@ -269,8 +251,8 @@ export default {
   }
 }
 .project {
-  background-color: $dark-color;
-  color: white;
+  background-color: #fcfcff;
+  color: black;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
@@ -280,13 +262,14 @@ export default {
   }
 
   &__title {
+    color: white;
     width: 100%;
     text-align: center;
     font-size: clamp(24px, 3vw, 42px);
     font-weight: 600;
     padding: 15px 0 10px 0;
     border-bottom: 1px solid $purple;
-    background-color: darken($purple, 30);
+    background-color: lighten($purple, 10);
     animation: flicker 1s infinite;
   }
 
@@ -307,28 +290,9 @@ export default {
       &--first {
         position: relative;
         margin: 60px auto 0 auto;
-        // width: 75vw;
-        transition: 1s ease-in-out;
-        box-shadow: 0 0 26px 2px rgba(#fff, 0.4);
-
-        &:hover {
-          transform: scale(1.1);
-          animation: 3s flicker infinite alternate;
-        }
-        .project__desc-image-wrapper {
-          position: absolute;
-          width: 75vw;
-          top: 0;
-          left: 0;
-          overflow: hidden;
-        }
 
         .project__desc-image {
           width: 75vw;
-
-          &--overlaying {
-            border-bottom: 5px solid $purple;
-          }
         }
       }
     }
@@ -345,7 +309,7 @@ export default {
         .box {
           &1,
           &2 {
-            box-shadow: 5px 0 205px 5px rgba($purple, 0.1);
+            box-shadow: 5px 0 205px 5px rgba($purple, 0.5);
             z-index: 10;
             position: absolute;
             width: 70%;
@@ -386,7 +350,8 @@ export default {
 
           & > .conclusion__title,
           & > .conclusion__desc {
-            background: darken($dark-color, 1);
+            // background: darken($dark-color, 1);
+            background: white;
           }
         }
 
@@ -436,16 +401,16 @@ export default {
           font-size: clamp(12px, 3vw, 30px);
           font-weight: 600;
           color: $purple;
-          background: $dark-color;
+          background: #fcfcff;
         }
 
         &__desc {
-          color: white;
+          color: black;
           transition: background 1s;
           z-index: 2;
           position: relative;
           padding: 0 0 15px 0;
-          background: $dark-color;
+          background: #fcfcff;
           width: 100%;
           font-size: clamp(12px, 1.8vw, 24px);
           text-align: center;
