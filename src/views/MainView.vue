@@ -301,7 +301,8 @@ export default {
               scrub: true,
               trigger: ".card:first-child",
               start: `${65 * index}px bottom`,
-              end: `+=150px bottom`,
+              endTrigger: ".about__main",
+              end: `bottom bottom`,
             },
             borderWidth: 2,
             ease: "power2.inOut",
@@ -317,12 +318,13 @@ export default {
             { width: "100%" },
             {
               width: "0%",
-              ease: "power2.inOut",
+              ease: "power2.in",
               scrollTrigger: {
                 scrub: true,
                 trigger: ".card:first-child",
                 start: `${65 * index}px bottom`,
-                end: `+=250px bottom`,
+                endTrigger: ".about__main",
+                end: `bottom bottom`,
               },
             }
           );
