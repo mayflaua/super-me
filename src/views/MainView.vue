@@ -1,7 +1,6 @@
 <template>
   <main class="content">
     <transition name="fade">
-      <!-- FIXME: после transform на main.content слетает fixed position -->
       <header class="menu" v-if="helloAnimationDone">
         <nav class="menu__list">
           <glitched-writer
@@ -397,53 +396,6 @@ export default {
       }
     },
 
-    // applyDescAnimation(index) {
-    //   tl = gsap.timeline();
-    //   this.currentDescIndex = index;
-    //   let card = document.querySelector(
-    //     `.project-card:nth-child(${index + 1})`
-    //   );
-    //   tl.to(window, {
-    //     duration: 0.6,
-    //     ease: "ease",
-
-    //     scrollTo: {
-    //       y: card.getBoundingClientRect().top + window.scrollY - 50,
-    //     },
-    //   })
-    //     .to(card, {
-    //       duration: 0.01,
-    //       "z-index": 100,
-    //       background: "#252525",
-    //       ease: "none",
-    //     })
-    //     .to(card, {
-    //       top: "-40px",
-    //       position: "fixed",
-    //       left: 0,
-    //       width: "100%",
-    //       height: "100vh",
-    //       duration: 1,
-    //       ease: "power4.inOut",
-    //     })
-    //     .to(card.lastChild, {
-    //       marginTop: "50px",
-    //       delay: -1,
-    //     })
-    //     .to(card.lastChild.lastChild, {
-    //       height: "fit-content",
-    //       opacity: 1,
-    //       // overflow: "auto",
-    //     });
-    // },
-
-    // showDescription(index) {
-    //   this.setScrolling(false);
-    //   this.applyDescAnimation(index);
-    //   tl.play();
-    //   console.log("showing element #" + (index + 1));
-    // },
-
     setScrolling(bool) {
       // disable scrolling if FALSE passed as argument
       if (!bool) {
@@ -456,16 +408,6 @@ export default {
         this.scrollAllowed = true;
       }
     },
-
-    // hideDescription() {
-    //   console.log("hiding");
-    //   tl.reverse().then(() => {
-    //     this.currentDescIndex = null;
-    //     this.setScrolling(true);
-    //     tl = null;
-    //     console.log("timeline killed");
-    //   });
-    // },
 
     saidHello() {
       this.helloAnimationDone = true;
@@ -516,9 +458,11 @@ export default {
 
   activated() {
     window.scroll(0, this.scrollPositionBeforeLeaving);
+
     this.firstLoad
       ? (this.firstLoad = false)
       : pageTl.reverse().then(() => {
+          document.querySelector(".content").style.transform = "none";
           this.setScrolling(true);
         });
   },
