@@ -1,5 +1,8 @@
 <template>
   <div class="page-loader">
+    <div class="reload" v-show="needReload">
+      Что то пошло не так, простите.<br />Перезагружу страницу.
+    </div>
     <div class="loader">
       <div class="circle circle--outer">
         <div class="circle circle--inner"></div>
@@ -9,7 +12,29 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    reloadTimer: null,
+    needReload: false,
+  }),
+  methods: {
+    reload() {
+      this.needReload = true;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    },
+  },
+  mounted() {
+    this.reloadTimer = setTimeout(() => {
+      this.reload();
+      console.warn("Loading took more than 5 seconds. Reloading");
+    }, 5000);
+  },
+  beforeUnmount() {
+    clearTimeout(this.reloadTimer);
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -30,6 +55,13 @@ export default {};
   top: 50%;
   left: 50%;
   transform: translate(-50px, -50px);
+}
+
+.reload {
+  width: 40%;
+  text-align: center;
+  font-size: clamp(16px, 2vw, 26px);
+  margin: 20vh auto;
 }
 
 .circle {
