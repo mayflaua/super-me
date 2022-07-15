@@ -12,8 +12,12 @@
         <span class="overlay-text">ПАРОЛЕЙ</span>
       </div>
     </div>
-    <div class="project" @mouseenter.once="applyAnimations">
-      <!-- FIXME: mouseenter это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
+    <div
+      class="project"
+      @mouseenter.once="applyAnimations"
+      @touchstart.once="applyAnimations"
+    >
+      <!-- FIXME: mouseenter и touchstart это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
       <div class="project__title">Генератор паролей</div>
       <div class="project__desc">
         <div class="project__desc-text">
@@ -21,9 +25,13 @@
         </div>
         <div class="project__desc-images project__desc-images--first">
           <img
+            v-if="!imageClicked"
+            @click="imageClicked = true"
             class="project__desc-image"
             src="@/assets/previews/password.gif"
           />
+          <div class="image-overlay">Нажмите, чтобы попробовать</div>
+          <password-generator v-show="imageClicked" class="password" />
         </div>
         <div class="project__desc-text">
           В данном проекте идея реализовать анимацию возникла раньше идеи
@@ -61,6 +69,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
+import PasswordGenerator from "@/components/PasswordGenerator.vue";
 import BackButton from "@/components/BackButton.vue";
 
 let overlays;
@@ -68,8 +77,11 @@ let wilTl;
 export default {
   components: {
     BackButton,
+    PasswordGenerator,
   },
   data: () => ({
+    animationsApplied: false,
+    imageClicked: false,
     isAnimating: true,
 
     whatILearnedList: [
@@ -81,11 +93,6 @@ export default {
       {
         title: "Работа с вводимыми данными в JS",
         desc: "для генерации пароля на основе выделенных опций",
-        link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
-      },
-      {
-        title: "Работа с HTML Canvas в JS",
-        desc: "в том числе динамическая отрисовка на основе вводимых данных пользователя",
         link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
       },
     ],
@@ -124,7 +131,7 @@ export default {
         height: document.querySelector(".project__desc-conclusions")
           .offsetHeight,
         borderWidth: 2,
-        "box-shadow": "5px 0 205px 5px rgba(255, 255, 255, 0.6)",
+        "box-shadow": "5px 0 205px 5px rgba(0, 0, 0, 0.6)",
         scrollTrigger: {
           scrub: 0.5,
           trigger: ".project__desc-conclusions",
@@ -141,7 +148,7 @@ export default {
         stagger: 0.6,
         scrollTrigger: {
           trigger: ".conclusions",
-          start: "top center",
+          start: "150% bottom",
         },
       };
       wilTl
@@ -179,13 +186,16 @@ export default {
 
     applyAnimations() {
       this.isAnimating = false;
-      this.applyWhatILearnedAnimations();
+      if (!this.animationsApplied) {
+        this.applyWhatILearnedAnimations();
+        this.animationsApplied = true;
+      }
     },
   },
 
   mounted() {
-    window.scrollTo(0, 0);
     this.$nextTick(() => {
+      window.scrollTo(0, 0);
       this.setScrolling(false);
       overlays = gsap.timeline();
       wilTl = gsap.timeline();
@@ -294,8 +304,39 @@ export default {
         position: relative;
         margin: 60px auto 0 auto;
 
+        .password {
+          width: 75vw;
+        }
+
         .project__desc-image {
           width: 75vw;
+
+          &:hover ~ .image-overlay {
+            opacity: 1;
+          }
+        }
+        .image-overlay {
+          pointer-events: none;
+          transition: opacity 0.5s ease;
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 5;
+
+          font-size: 24px;
+          font-weight: 500;
+
+          color: white;
+          background: rgba(167, 167, 167, 0.8);
+          text-shadow: 0 3px 10px black;
+
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
     }
@@ -353,8 +394,7 @@ export default {
 
           & > .conclusion__title,
           & > .conclusion__desc {
-            // background: darken($dark-color, 1);
-            background: white;
+            background: darken(white, 1);
           }
         }
 
@@ -432,6 +472,13 @@ export default {
       }
       &-images {
         margin: 30px auto;
+
+        .image-overlay {
+          font-size: 16px;
+          opacity: 0.7;
+          height: 30px;
+          top: -30px;
+        }
       }
     }
   }

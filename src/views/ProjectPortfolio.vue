@@ -10,8 +10,12 @@
       </div>
       <div class="overlay overlay4"><span class="overlay-text">JS</span></div>
     </div>
-    <div class="project" @mouseenter.once="applyAnimations">
-      <!-- FIXME: mouseenter это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
+    <div
+      class="project"
+      @mouseenter.once="applyAnimations"
+      @touchstart.once="applyAnimations"
+    >
+      <!-- FIXME: mouseenter и touchstart это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
       <div class="project__title">Портфолио</div>
       <div class="project__desc">
         <div class="project__desc-text">
@@ -77,8 +81,8 @@ export default {
     BackButton,
   },
   data: () => ({
+    animationsApplied: false,
     isAnimating: true,
-    refreshed: false,
 
     whatILearnedList: [
       {
@@ -197,15 +201,17 @@ export default {
     },
     applyAnimations() {
       this.isAnimating = false;
-      this.applyWhatILearnedAnimations();
-      this.applyImageAnimation();
-      console.log("applied");
+      if (!this.animationsApplied) {
+        this.applyWhatILearnedAnimations();
+        this.applyImageAnimation();
+        this.animationsApplied = true;
+      }
     },
   },
 
   mounted() {
-    window.scrollTo(0, 0);
     this.$nextTick(() => {
+      window.scrollTo(0, 0);
       this.setScrolling(false);
       overlays = gsap.timeline();
       wilTl = gsap.timeline();
@@ -273,7 +279,7 @@ export default {
   }
 }
 .project {
-  background-color: $dark-color;
+  background-color: #010c15;
   color: white;
   min-height: 100vh;
   width: 100%;
@@ -313,9 +319,7 @@ export default {
       &--first {
         position: relative;
         margin: 60px auto 0 auto;
-        // width: 75vw;
         transition: 1s ease-in-out;
-        box-shadow: 0 0 26px 2px rgba(#fff, 0.4);
 
         &:hover {
           transform: scale(1.1);
@@ -392,7 +396,7 @@ export default {
 
           & > .conclusion__title,
           & > .conclusion__desc {
-            background: darken($dark-color, 1);
+            background: darken(#010c15, 1);
           }
         }
 
@@ -442,7 +446,7 @@ export default {
           font-size: clamp(12px, 3vw, 30px);
           font-weight: 600;
           color: $purple;
-          background: $dark-color;
+          background: #010c15;
         }
 
         &__desc {
@@ -451,7 +455,7 @@ export default {
           z-index: 2;
           position: relative;
           padding: 0 0 15px 0;
-          background: $dark-color;
+          background: #010c15;
           width: 100%;
           font-size: clamp(12px, 1.8vw, 24px);
           text-align: center;
