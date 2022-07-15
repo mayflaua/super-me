@@ -12,7 +12,8 @@
         <span class="overlay-text">ПАРОЛЕЙ</span>
       </div>
     </div>
-    <div class="project">
+    <div class="project" @mouseenter.once="applyAnimations">
+      <!-- FIXME: mouseenter это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
       <div class="project__title">Генератор паролей</div>
       <div class="project__desc">
         <div class="project__desc-text">
@@ -153,41 +154,43 @@ export default {
         .to(".box2", {
           left: "unset",
           right: 15,
-          delay: -5,
           ...opts1,
         })
         .to(".box2", opts2);
       gsap.from(".conclusion", opts3);
     },
     applyOverlayAnimation() {
-      overlays.to(".overlay", {
-        width: "0vw",
-        duration: 0.3,
-        stagger: 0.3,
-      });
-
-      gsap.from(".project__desc", {
-        delay: 1.2,
-        opacity: 0,
-        y: 100,
-        duration: 0.5,
-      });
+      overlays
+        .to(".overlay", {
+          width: "0vw",
+          duration: 0.3,
+          stagger: 0.3,
+        })
+        .fromTo(
+          ".project__desc",
+          {
+            opacity: 0,
+            y: 100,
+            duration: 0.5,
+          },
+          { opacity: 1, y: 0 }
+        );
     },
 
     applyAnimations() {
       this.isAnimating = false;
-      this.applyOverlayAnimation();
       this.applyWhatILearnedAnimations();
     },
   },
 
   mounted() {
+    window.scrollTo(0, 0);
     this.$nextTick(() => {
+      this.setScrolling(false);
       overlays = gsap.timeline();
       wilTl = gsap.timeline();
-      window.scrollTo(0, 0);
-      this.applyAnimations();
-      this.setScrolling(false);
+      this.applyOverlayAnimation();
+
       overlays.play().then(() => this.setScrolling(true));
     });
   },
