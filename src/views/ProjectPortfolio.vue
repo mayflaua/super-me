@@ -10,12 +10,7 @@
       </div>
       <div class="overlay overlay4"><span class="overlay-text">JS</span></div>
     </div>
-    <div
-      class="project"
-      @mouseenter.once="applyAnimations"
-      @touchstart.once="applyAnimations"
-    >
-      <!-- FIXME: mouseenter и touchstart это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
+    <div class="project">
       <div class="project__title">Портфолио</div>
       <div class="project__desc">
         <div class="project__desc-text">
@@ -81,7 +76,6 @@ export default {
     BackButton,
   },
   data: () => ({
-    animationsApplied: false,
     isAnimating: true,
 
     whatILearnedList: [
@@ -185,7 +179,13 @@ export default {
             y: 100,
             duration: 0.5,
           },
-          { opacity: 1, y: 0 }
+          {
+            opacity: 1,
+            y: 0,
+            onComplete: () => {
+              this.applyAnimations();
+            },
+          }
         );
     },
     applyImageAnimation() {
@@ -201,11 +201,8 @@ export default {
     },
     applyAnimations() {
       this.isAnimating = false;
-      if (!this.animationsApplied) {
-        this.applyWhatILearnedAnimations();
-        this.applyImageAnimation();
-        this.animationsApplied = true;
-      }
+      this.applyWhatILearnedAnimations();
+      this.applyImageAnimation();
     },
   },
 

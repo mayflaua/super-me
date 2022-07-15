@@ -12,12 +12,7 @@
         <span class="overlay-text">ПАРОЛЕЙ</span>
       </div>
     </div>
-    <div
-      class="project"
-      @mouseenter.once="applyAnimations"
-      @touchstart.once="applyAnimations"
-    >
-      <!-- FIXME: mouseenter и touchstart это костыль, чето надо сделать чтобы при первой загрузке триггеры правильно ставились -->
+    <div class="project">
       <div class="project__title">Генератор паролей</div>
       <div class="project__desc">
         <div class="project__desc-text">
@@ -80,7 +75,6 @@ export default {
     PasswordGenerator,
   },
   data: () => ({
-    animationsApplied: false,
     imageClicked: false,
     isAnimating: true,
 
@@ -180,16 +174,20 @@ export default {
             y: 100,
             duration: 0.5,
           },
-          { opacity: 1, y: 0 }
+          {
+            opacity: 1,
+            y: 0,
+            onComplete: () => {
+              this.applyWhatILearnedAnimations();
+            },
+          }
         );
     },
 
     applyAnimations() {
       this.isAnimating = false;
-      if (!this.animationsApplied) {
-        this.applyWhatILearnedAnimations();
-        this.animationsApplied = true;
-      }
+      this.applyWhatILearnedAnimations();
+      this.animationsApplied = true;
     },
   },
 
