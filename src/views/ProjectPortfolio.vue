@@ -253,7 +253,7 @@ export default {
     background: linear-gradient(
       to right,
       lighten($purple, 5),
-      lighten($purple, 10)
+      lighten(#010c15, 5)
     );
   }
   &3 {
@@ -261,18 +261,14 @@ export default {
 
     background: linear-gradient(
       to right,
-      lighten($purple, 10),
-      lighten($purple, 15)
+      lighten(#010c15, 10),
+      lighten(#010c15, 5)
     );
   }
   &4 {
     z-index: 11;
 
-    background: linear-gradient(
-      to right,
-      lighten($purple, 15),
-      lighten($purple, 20)
-    );
+    background: linear-gradient(to right, lighten(#010c15, 5), #010c15);
   }
 }
 .project {

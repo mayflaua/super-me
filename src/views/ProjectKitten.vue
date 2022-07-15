@@ -3,36 +3,39 @@
     <div class="overlays">
       <div class="overlay overlay1"></div>
       <div class="overlay overlay2">
-        <span class="overlay-text">JS</span>
+        <span class="overlay-text">kaboom.js</span>
       </div>
       <div class="overlay overlay3">
-        <span class="overlay-text">ГЕНЕРАТОР</span>
+        <span class="overlay-text">Котенок</span>
       </div>
       <div class="overlay overlay4">
-        <span class="overlay-text">ПАРОЛЕЙ</span>
+        <span class="overlay-text">и&nbsp;огурцы</span>
       </div>
     </div>
     <div class="project">
-      <div class="project__title">Генератор паролей</div>
+      <div class="project__title">Котенок и огурцы</div>
       <div class="project__desc">
         <div class="project__desc-text">
-          JavaScript генератор паролей с визуализацией.
+          Игра-раннер, написанная на JavaScript c использованием библиотеки
+          <a href="https://kaboomjs.com/" target="_blank" class="link">
+            kaboom.js
+          </a>
         </div>
         <div class="project__desc-images project__desc-images--first">
-          <img
-            v-if="!imageClicked"
-            @click="imageClicked = true"
+          <video
+            playsinline
+            autoplay
+            muted
+            loop
             class="project__desc-image"
-            src="@/assets/previews/password.gif"
+            src="@/assets/previews/kitten.webm"
           />
-          <div class="image-overlay">Нажмите, чтобы попробовать</div>
-          <password-generator v-show="imageClicked" class="password" />
         </div>
         <div class="project__desc-text">
-          В данном проекте идея реализовать анимацию возникла раньше идеи
-          генератора пароля.<br />Для генерации я использовал псевдо-случайные
-          числа с помощью Math, поэтому пароль не считается криптографически
-          безопасным.<br />
+          Чтобы отвлечься от базовых технологий HTML/CSS/JS и пополнить
+          портфолио чем-то интересным, я решил сделать Google Dino на свой лад -
+          с кошкой и огурцами.<br />Все спрайты, кроме заднего фона нарисованы
+          моей девушкой.
         </div>
       </div>
       <div class="project__desc-conclusions">
@@ -54,6 +57,7 @@
           </a>
         </div>
       </div>
+      <img class="kitten" src="@/assets/gif/kitten.gif" />
       <back-button class="back-button" @click="back" />
     </div>
   </div>
@@ -64,7 +68,6 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-import PasswordGenerator from "@/components/PasswordGenerator.vue";
 import BackButton from "@/components/BackButton.vue";
 
 let overlays;
@@ -72,21 +75,19 @@ let wilTl;
 export default {
   components: {
     BackButton,
-    PasswordGenerator,
   },
   data: () => ({
-    imageClicked: false,
     isAnimating: true,
 
     whatILearnedList: [
       {
-        title: "Взаимодействие с DOM с помощью JS",
-        desc: "Измененение стиля элемента в зависимости от контента (подсветка цифр)",
-        link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
+        title: "Использование kaboom.js",
+        desc: "для создания игры всего за два дня",
+        link: "https://github.com/mayflaua/me/blob/master/games/kitten/script/kitten.js",
       },
       {
-        title: "Работа с вводимыми данными в JS",
-        desc: "для генерации пароля на основе выделенных опций",
+        title: "Создание спрайтов из отдельно взятых изображений",
+        desc: "для создания эффекта анимации",
         link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
       },
     ],
@@ -186,6 +187,7 @@ export default {
 
     applyAnimations() {
       this.isAnimating = false;
+
       this.applyWhatILearnedAnimations();
       this.animationsApplied = true;
     },
@@ -212,6 +214,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/style/colors.scss";
+$sky: rgb(137, 206, 248);
+$grass: #87b275;
 .overlay {
   overflow: hidden;
   font-size: 64px;
@@ -239,29 +243,40 @@ export default {
     background: linear-gradient(
       to right,
       lighten($purple, 5),
-      darken(white, 20)
+      lighten($grass, 10)
     );
   }
   &3 {
     z-index: 12;
 
-    background: linear-gradient(to right, darken(white, 20), darken(white, 15));
+    background: linear-gradient(
+      to right,
+      lighten($grass, 10),
+      lighten($sky, 10)
+    );
   }
   &4 {
     z-index: 11;
 
-    background: linear-gradient(to right, darken(white, 15), darken(white, 10));
+    background: linear-gradient(to right, lighten($sky, 10), $sky);
   }
 }
 .project {
-  background-color: #fcfcff;
+  background: $grass;
   color: black;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
+  position: relative;
 
   .back-button {
     margin: 110px auto;
+  }
+
+  .kitten {
+    display: block;
+    margin: 0 auto;
+    transform: translate(-50px, 110px);
   }
 
   &__title {
@@ -277,6 +292,8 @@ export default {
   }
 
   &__desc {
+    background: linear-gradient(to bottom, $sky 50%, $grass 50%);
+
     padding: 60px 0 0 0;
     display: flex;
     flex-direction: column;
@@ -287,6 +304,13 @@ export default {
       text-align: center;
       margin: 50px auto 0 auto;
       font-size: 26px;
+      color: white;
+      text-shadow: 0 0 20px $sky;
+
+      .link {
+        color: $purple;
+        text-decoration: underline;
+      }
     }
 
     &-images {
@@ -294,39 +318,8 @@ export default {
         position: relative;
         margin: 60px auto 0 auto;
 
-        .password {
-          width: 75vw;
-        }
-
         .project__desc-image {
-          width: 75vw;
-
-          &:hover ~ .image-overlay {
-            opacity: 1;
-          }
-        }
-        .image-overlay {
-          pointer-events: none;
-          transition: opacity 0.5s ease;
-          opacity: 0;
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-          z-index: 5;
-
-          font-size: 24px;
-          font-weight: 500;
-
-          color: white;
-          background: rgba(167, 167, 167, 0.8);
-          text-shadow: 0 3px 10px black;
-
-          text-align: center;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          width: 100vw;
         }
       }
     }
@@ -339,16 +332,17 @@ export default {
 
       &--first {
         position: relative;
-
+        color: white;
+        text-shadow: 2px 0 15px $sky;
         .box {
           &1,
           &2 {
-            box-shadow: 5px 0 205px 5px rgba($purple, 0.5);
+            box-shadow: 5px 0 205px 5px rgba($sky, 0.5);
             z-index: 10;
             position: absolute;
             width: 70%;
             height: 60px;
-            border: 4px solid $purple;
+            border: 4px solid $sky;
             top: 50%;
             left: 50%;
           }
@@ -380,11 +374,11 @@ export default {
         transition: box-shadow 1s;
 
         &:hover {
-          box-shadow: 0 15px 35px 0px rgba($purple, 0.1);
+          box-shadow: 0 15px 35px 0px rgba($sky, 0.1);
 
           & > .conclusion__title,
           & > .conclusion__desc {
-            background: darken(white, 1);
+            background: darken($grass, 10);
           }
         }
 
@@ -395,10 +389,11 @@ export default {
           position: absolute;
           width: 50px;
           height: 50px;
-          background: $purple;
+          background: $sky;
           z-index: 1;
           filter: blur(3px);
-          animation: 1s a linear infinite, flicker 3s infinite;
+          animation: 1s a linear infinite;
+          box-shadow: 0 0 80px $sky;
         }
         &:hover:after {
           animation-delay: -0.5s;
@@ -425,25 +420,25 @@ export default {
         }
 
         &__title {
+          color: white;
           transition: background 1s;
           z-index: 2;
           position: relative;
-          width: 100%;
           padding: 15px 0 10px 0;
-          text-align: center;
-          font-size: clamp(12px, 3vw, 30px);
+          width: 100%;
+          background: $grass;
           font-weight: 600;
-          color: $purple;
-          background: #fcfcff;
+          font-size: clamp(12px, 3vw, 30px);
+          text-align: center;
         }
 
         &__desc {
-          color: black;
+          color: darken(white, 10);
           transition: background 1s;
           z-index: 2;
           position: relative;
           padding: 0 0 15px 0;
-          background: #fcfcff;
+          background: $grass;
           width: 100%;
           font-size: clamp(12px, 1.8vw, 24px);
           text-align: center;
