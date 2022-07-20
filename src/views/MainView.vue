@@ -152,6 +152,16 @@
           </div>
         </div>
       </div>
+      <div class="star">
+        <a
+          class="star__image"
+          href="https://apod.nasa.gov/apod/ap010302.html"
+          target="_blank"
+        ></a>
+        <div class="star__text">
+          Изображение молодой звезды, сделанное NASA в день моего рождения
+        </div>
+      </div>
     </section>
 
     <section class="contact" id="contact">contact</section>
@@ -910,6 +920,55 @@ html {
     //     }
     //   }
     // }
+  }
+
+  & .star {
+    width: 100%;
+    &__image {
+      margin: 0 auto;
+      display: block;
+      cursor: pointer;
+
+      height: 150px;
+      width: 150px;
+      background: no-repeat center/contain url("@/assets/star.png");
+      position: relative;
+      animation: 70s rotate linear infinite;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-48%, -50%);
+        width: 68%;
+        height: 75%;
+        border-radius: 50%;
+        box-shadow: 0 0 20px -2px #ed7031;
+        animation: 2s shadow linear infinite alternate;
+
+        @keyframes shadow {
+          from {
+            box-shadow: 0 0 20px -2px #ed7031;
+          }
+          to {
+            box-shadow: 0 0 81px 9px #ed7031;
+          }
+        }
+        @keyframes rotate {
+          to {
+            transform: rotate(1turn);
+          }
+        }
+      }
+    }
+    &__text {
+      text-align: center;
+      width: 100%;
+      font-size: 1rem;
+      color: lighten($light-color, 20);
+      margin: 1em 0 0 0;
+    }
   }
 }
 
