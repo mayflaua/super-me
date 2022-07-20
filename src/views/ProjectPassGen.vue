@@ -116,7 +116,7 @@ export default {
         scrollTrigger: {
           trigger: ".project__desc-conclusions",
           start: "-50px center",
-          end: "+=100px",
+          end: "+=70px",
           scrub: 0.5,
         },
       };
@@ -129,7 +129,7 @@ export default {
         scrollTrigger: {
           scrub: 0.5,
           trigger: ".project__desc-conclusions",
-          start: "50px center",
+          start: "10% center",
           endTrigger: ".project",
           end: "bottom bottom",
         },
