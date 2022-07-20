@@ -3,39 +3,36 @@
     <div class="overlays">
       <div class="overlay overlay1"></div>
       <div class="overlay overlay2">
-        <span class="overlay-text">kaboom.js</span>
+        <span class="overlay-text">HTML</span>
       </div>
       <div class="overlay overlay3">
-        <span class="overlay-text">Котенок</span>
+        <span class="overlay-text">CSS</span>
       </div>
-      <div class="overlay overlay4">
-        <span class="overlay-text">и&nbsp;огурцы</span>
-      </div>
+      <div class="overlay overlay4"><span class="overlay-text">Vue</span></div>
     </div>
     <div class="project">
-      <div class="project__title">Котенок и огурцы</div>
+      <div class="project__title">Портфолио #2</div>
       <div class="project__desc">
         <div class="project__desc-text">
-          Игра-раннер, написанная на JavaScript c использованием библиотеки
-          <a href="https://kaboomjs.com/" target="_blank" class="link">
-            kaboom.js
-          </a>
+          Изначально сайт был задуман как сборник проектов и реализован без
+          фреймворка, и это получилось плохо - были пробемы с организацией
+          файлов и путей к ним, а так же много повторяющегося кода.
         </div>
         <div class="project__desc-images project__desc-images--first">
-          <video
-            playsinline
-            autoplay
-            muted
-            loop
+          <img
             class="project__desc-image"
-            src="@/assets/previews/kitten.webm"
+            src="@/assets/previews/portfolio2_1.jpg"
           />
+          <div class="project__desc-image-wrapper">
+            <img
+              class="project__desc-image project__desc-image--overlaying"
+              src="@/assets/previews/portfolio2_2.jpg"
+            />
+          </div>
         </div>
         <div class="project__desc-text">
-          Чтобы отвлечься от базовых технологий HTML/CSS/JS и пополнить
-          портфолио чем-то интересным, я решил сделать Google Dino на свой лад -
-          с кошкой и огурцами.<br />Все спрайты, кроме заднего фона нарисованы
-          моей девушкой.
+          Существующие проблемы я решил исправить с помощью фрейморка. С этого
+          момента я начал изучать Vue, параллельно переводя сайт на него.
         </div>
       </div>
       <div class="project__desc-conclusions">
@@ -57,7 +54,6 @@
           </a>
         </div>
       </div>
-      <img class="kitten" src="@/assets/gif/kitten.gif" />
       <back-button class="back-button" @click="back" />
     </div>
   </div>
@@ -81,14 +77,14 @@ export default {
 
     whatILearnedList: [
       {
-        title: "Использование kaboom.js",
-        desc: "для создания игры всего за два дня",
-        link: "https://github.com/mayflaua/me/blob/master/games/kitten/script/kitten.js",
+        title: "Использование Vue для создания SPA",
+        desc: "с использованием Vue router",
+        link: "https://github.com/mayflaua/me/tree/master/src",
       },
       {
-        title: "Создание спрайтов из отдельно взятых изображений",
-        desc: "для создания эффекта анимации",
-        link: "https://github.com/mayflaua/me/blob/master/tools/password/script/password.js",
+        title: "Сборка и публикация сайта",
+        desc: "на хостинг (был на текущем домене)",
+        link: "https://mayflaua.github.io/me",
       },
     ],
   }),
@@ -105,7 +101,7 @@ export default {
       }
     },
     back() {
-      overlays.reverse().then(() => this.$router.push("/"));
+      overlays.reverse().then(() => this.$router.go(-1));
       this.setScrolling(false);
     },
     applyWhatILearnedAnimations() {
@@ -117,7 +113,7 @@ export default {
         scrollTrigger: {
           trigger: ".project__desc-conclusions",
           start: "-50px center",
-          end: "+=100px",
+          end: "+=70px",
           scrub: 0.5,
         },
       };
@@ -126,11 +122,11 @@ export default {
         height: document.querySelector(".project__desc-conclusions")
           .offsetHeight,
         borderWidth: 2,
-        "box-shadow": "5px 0 205px 5px rgba(0, 0, 0, 0.6)",
+        "box-shadow": "5px 0 205px 5px rgba(255, 255, 255, 0.6)",
         scrollTrigger: {
           scrub: 0.5,
           trigger: ".project__desc-conclusions",
-          start: "50px center",
+          start: "10% center",
           endTrigger: ".project",
           end: "bottom bottom",
         },
@@ -179,17 +175,26 @@ export default {
             opacity: 1,
             y: 0,
             onComplete: () => {
-              this.applyWhatILearnedAnimations();
+              this.applyAnimations();
             },
           }
         );
     },
-
+    applyImageAnimation() {
+      gsap.from(".project__desc-image-wrapper", {
+        width: 0,
+        scrollTrigger: {
+          scrub: true,
+          trigger: ".project__desc-images",
+          start: "40% center",
+          end: "60% center",
+        },
+      });
+    },
     applyAnimations() {
       this.isAnimating = false;
-
       this.applyWhatILearnedAnimations();
-      this.animationsApplied = true;
+      this.applyImageAnimation();
     },
   },
 
@@ -204,7 +209,6 @@ export default {
       overlays.play().then(() => this.setScrolling(true));
     });
   },
-
   beforeUnmount() {
     overlays.kill();
     wilTl.kill();
@@ -214,8 +218,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/style/colors.scss";
-$sky: rgb(137, 206, 248);
-$grass: #87b275;
 .overlay {
   overflow: hidden;
   font-size: 64px;
@@ -239,10 +241,11 @@ $grass: #87b275;
   }
   &2 {
     z-index: 13;
+
     background: linear-gradient(
       to right,
       lighten($purple, 5),
-      lighten($grass, 10)
+      lighten(#ffaa00, 5)
     );
   }
   &3 {
@@ -250,32 +253,25 @@ $grass: #87b275;
 
     background: linear-gradient(
       to right,
-      lighten($grass, 10),
-      lighten($sky, 10)
+      lighten(#ffaa00, 10),
+      lighten(#ffaa00, 5)
     );
   }
   &4 {
     z-index: 11;
 
-    background: linear-gradient(to right, lighten($sky, 10), $sky);
+    background: linear-gradient(to right, lighten(#ffaa00, 5), #ffaa00);
   }
 }
 .project {
-  background: $grass;
+  background-color: white;
   color: black;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  position: relative;
 
   .back-button {
     margin: 110px auto;
-  }
-
-  .kitten {
-    display: block;
-    margin: 0 auto;
-    transform: translate(-50px, 110px);
   }
 
   &__title {
@@ -291,8 +287,8 @@ $grass: #87b275;
   }
 
   &__desc {
-    background: linear-gradient(to bottom, $sky 50%, $grass 50%);
-
+    opacity: 1;
+    transform: none;
     padding: 60px 0 0 0;
     display: flex;
     flex-direction: column;
@@ -303,22 +299,28 @@ $grass: #87b275;
       text-align: center;
       margin: 50px auto 0 auto;
       font-size: 26px;
-      color: white;
-      text-shadow: 0 0 20px $sky;
-
-      .link {
-        color: $purple;
-        text-decoration: underline;
-      }
     }
 
     &-images {
       &--first {
         position: relative;
         margin: 60px auto 0 auto;
+        transition: 1s ease-in-out;
+
+        .project__desc-image-wrapper {
+          position: absolute;
+          width: 75vw;
+          top: 0;
+          left: 0;
+          overflow: hidden;
+        }
 
         .project__desc-image {
-          width: 100vw;
+          width: 75vw;
+
+          &--overlaying {
+            border-bottom: 5px solid #ffaa00;
+          }
         }
       }
     }
@@ -331,17 +333,16 @@ $grass: #87b275;
 
       &--first {
         position: relative;
-        color: white;
-        text-shadow: 2px 0 15px $sky;
+
         .box {
           &1,
           &2 {
-            box-shadow: 5px 0 205px 5px rgba($sky, 0.5);
+            box-shadow: 5px 0 205px 5px rgba(#ffd073, 0.1);
             z-index: 10;
             position: absolute;
             width: 70%;
             height: 60px;
-            border: 4px solid $sky;
+            border: 4px solid #ffd073;
             top: 50%;
             left: 50%;
           }
@@ -373,11 +374,11 @@ $grass: #87b275;
         transition: box-shadow 1s;
 
         &:hover {
-          box-shadow: 0 15px 35px 0px rgba($sky, 0.1);
+          box-shadow: 0 15px 35px 0px rgba(#ffaa00, 0.1);
 
           & > .conclusion__title,
           & > .conclusion__desc {
-            background: darken($grass, 10);
+            background: lighten(#ffbf40, 20);
           }
         }
 
@@ -388,11 +389,12 @@ $grass: #87b275;
           position: absolute;
           width: 50px;
           height: 50px;
-          background: $sky;
+          background: #ffaa00;
           z-index: 1;
           filter: blur(3px);
+          box-shadow: 0 0 80px #ffaa00;
+
           animation: 1s a linear infinite;
-          box-shadow: 0 0 80px $sky;
         }
         &:hover:after {
           animation-delay: -0.5s;
@@ -419,25 +421,25 @@ $grass: #87b275;
         }
 
         &__title {
-          color: white;
           transition: background 1s;
           z-index: 2;
           position: relative;
-          padding: 15px 0 10px 0;
           width: 100%;
-          background: $grass;
-          font-weight: 600;
-          font-size: clamp(12px, 3vw, 30px);
+          padding: 15px 0 10px 0;
           text-align: center;
+          font-size: clamp(12px, 3vw, 30px);
+          font-weight: 600;
+          color: #ffaa00;
+          background: white;
         }
 
         &__desc {
-          color: darken(white, 10);
+          color: black;
           transition: background 1s;
           z-index: 2;
           position: relative;
           padding: 0 0 15px 0;
-          background: $grass;
+          background: white;
           width: 100%;
           font-size: clamp(12px, 1.8vw, 24px);
           text-align: center;
@@ -456,13 +458,6 @@ $grass: #87b275;
       }
       &-images {
         margin: 30px auto;
-
-        .image-overlay {
-          font-size: 16px;
-          opacity: 0.7;
-          height: 30px;
-          top: -30px;
-        }
       }
     }
   }
