@@ -4,6 +4,7 @@ import ProjectPortfolio from "@/views/ProjectPortfolio.vue";
 import ProjectPortfolio2 from "@/views/ProjectPortfolio2.vue";
 import ProjectPassGen from "@/views/ProjectPassGen.vue";
 import ProjectKitten from "@/views/ProjectKitten.vue";
+import ProjectGrocery from "@/views/ProjectGrocery.vue";
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: "/portfolio2",
     name: "portfolio2",
     component: ProjectPortfolio2,
+  },
+  {
+    path: "/grocery",
+    name: "grocery",
+    component: ProjectGrocery,
   },
 ];
 

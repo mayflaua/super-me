@@ -259,6 +259,11 @@ export default {
 
           link: "https://mayflaua.github.io/me/",
         },
+        {
+          route: "grocery",
+          title: "Список покупок",
+          desc: "Немного измененный todo list с использованием Vuex.",
+        },
       ],
     };
   },
