@@ -25,7 +25,9 @@
             class="project__desc-image"
             src="@/assets/previews/password.gif"
           />
-          <div class="image-overlay">Нажмите, чтобы попробовать</div>
+          <div class="image-overlay" v-show="!imageClicked">
+            Нажмите, чтобы попробовать
+          </div>
           <password-generator v-show="imageClicked" class="password" />
         </div>
         <div class="project__desc-text">
