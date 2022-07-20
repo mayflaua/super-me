@@ -24,12 +24,15 @@
         <div class="project__desc-images project__desc-images--first">
           <video
             playsinline
-            autoplay
             muted
+            autoplay
             loop
+            preload
             class="project__desc-image"
-            src="@/assets/previews/kitten.webm"
-          />
+            src="@/assets/previews/kitten.mp4"
+          >
+            женя жопа
+          </video>
         </div>
         <div class="project__desc-text">
           Чтобы отвлечься от базовых технологий HTML/CSS/JS и пополнить

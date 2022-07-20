@@ -21,9 +21,11 @@
           <video
             class="project__desc-image"
             src="@/assets/previews/grocery.mp4"
-            autoplay
             loop
             muted
+            playsinline
+            autoplay
+            preload
           />
         </div>
         <div class="project__desc-text">
