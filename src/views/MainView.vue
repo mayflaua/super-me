@@ -316,7 +316,6 @@ export default {
           },
           {
             scrollTrigger: {
-              scrub: true,
               trigger: ".card:first-child",
               start: `${65 * index}px bottom`,
               endTrigger: ".about__main",
@@ -338,7 +337,6 @@ export default {
               width: "0%",
               ease: "power2.in",
               scrollTrigger: {
-                scrub: true,
                 trigger: ".card:first-child",
                 start: `${65 * index}px bottom`,
                 endTrigger: ".about__main",
@@ -416,6 +414,15 @@ export default {
       }
     },
 
+    applyProjectsAnimation() {
+      gsap.from(".project-card__number", {
+        width: "100vw",
+        duration: 0.4,
+        stagger: 0.2,
+        scrollTrigger: ".project-card__number",
+      });
+    },
+
     setScrolling(bool) {
       // disable scrolling if FALSE passed as argument
       if (!bool) {
@@ -462,6 +469,7 @@ export default {
       this.applyParticles();
       this.applyAboutAnimations();
       this.applyAboutQuoteAnimations();
+      this.applyProjectsAnimation();
     },
   },
 
