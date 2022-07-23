@@ -135,6 +135,7 @@
       >
         <div class="project-card__number">{{ num + 1 }}</div>
         <div class="project-card__content">
+          <div class="project-card__overlay"></div>
           <div class="project-card__content-title">{{ project.title }}</div>
           <div class="project-card__content-desc">
             {{ project.desc }}
@@ -169,13 +170,71 @@
       </div>
     </section>
 
-    <section class="contact" id="contact">contact</section>
+    <section class="contact" id="contact">
+      <div class="contact__form-wrapper">
+        <form action="" class="contact__form">
+          <div class="input-wrapper">
+            <input
+              id="input1"
+              class="input form__name"
+              type="text"
+              name="name"
+              required
+              pattern=".{3,}"
+              v-model="formName"
+              @input="highlightInputs(validateForm())"
+            /><span
+              class="input__label"
+              :class="formName ? 'input__label--notEmpty' : ''"
+              >ИМЯ</span
+            >
+          </div>
+          <div class="input-wrapper">
+            <input
+              id="input2"
+              type="email"
+              class="input form__email"
+              name="email"
+              required
+              v-model="formEmail"
+              @input="highlightInputs(validateForm())"
+            /><span
+              class="input__label"
+              :class="formEmail ? 'input__label--notEmpty' : ''"
+              >EMAIL</span
+            >
+          </div>
+          <div class="input-wrapper">
+            <textarea
+              id="input3"
+              class="input form__message"
+              name="message"
+              rows="4"
+              required
+              v-model="formMessage"
+              @input="highlightInputs(validateForm())"
+            ></textarea
+            ><span
+              class="input__label"
+              :class="formMessage ? 'input__label--notEmpty' : ''"
+              >СООБЩЕНИЕ</span
+            >
+          </div>
+          <back-button
+            class="form__send-btn"
+            @click.prevent="sendForm"
+            text="ОТПРАВИТЬ"
+          />
+        </form>
+      </div>
+    </section>
   </main>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
 /* eslint-disable vue/no-unused-components */
+import $ from "jquery";
 
 import GlitchedWriter from "vue-glitched-writer";
 import gsap from "gsap";
@@ -185,6 +244,8 @@ import Parallax from "parallax-js";
 import PagePreloader from "@/components/PagePreloader";
 gsap.registerPlugin(ScrollTrigger, ScrollTo);
 
+import BackButton from "@/components/BackButton";
+
 // let tl = gsap.timeline({ paused: true });
 let pageTl = gsap.timeline({ paused: true });
 
@@ -193,6 +254,7 @@ export default {
   components: {
     GlitchedWriter,
     PagePreloader,
+    BackButton,
   },
   data() {
     return {
@@ -204,6 +266,10 @@ export default {
         delay: [200, 1000],
       },
       isLoading: true,
+
+      formName: "",
+      formEmail: "",
+      formMessage: "",
 
       cards: [
         {
@@ -289,6 +355,55 @@ export default {
   },
 
   methods: {
+    sendForm() {
+      let res = this.validateForm();
+      if (res === 0) {
+        let data = $(".contact__form").serialize();
+        $.ajax({
+          url: "https://letmepresentmyself.site/send.php",
+          method: "post",
+          dataType: "html",
+          data: data,
+          success: () => console.info("form sent"),
+          error: () => console.log("form wasnt sent"),
+        });
+        this.formName = "";
+        this.formEmail = "";
+        this.formMessage = "";
+      } else {
+        this.highlightInputs(res);
+      }
+    },
+
+    highlightInputs(nums) {
+      $(`.input`).removeClass("invalid");
+      if (nums) {
+        this.$nextTick(() =>
+          nums.forEach((num) => $(`#input${num}`).addClass("invalid"))
+        );
+      }
+    },
+
+    validateForm() {
+      // 0 if valid or invalid input numbers array ( 1 / 2 / 3 )
+      let res = [];
+
+      // false if name is less than 2 characters
+      if (this.formName.length <= 2) res.push(1);
+
+      // false if email dont match email regexp
+      if (
+        !this.formEmail.match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+      )
+        res.push(2);
+
+      // false if message has less than 1 word
+      if (this.formMessage.split(" ").length <= 1) res.push(3);
+
+      return res.length === 0 ? 0 : res;
+    },
     applyAboutAnimations() {
       // title animation
       gsap.fromTo(
@@ -439,11 +554,12 @@ export default {
     },
 
     applyProjectsAnimation() {
-      gsap.from(".project-card__number", {
-        width: "100vw",
+      gsap.to(".project-card__overlay", {
+        width: "0",
         duration: 0.4,
         stagger: 0.2,
         scrollTrigger: ".project-card__number",
+        ease: "ease",
       });
     },
 
@@ -493,8 +609,7 @@ export default {
       this.applyParticles();
       this.applyAboutAnimations();
       this.applyAboutQuoteAnimations();
-      // TODO: update animation nimber no width
-      // this.applyProjectsAnimation();
+      this.applyProjectsAnimation();
     },
   },
 
@@ -846,6 +961,18 @@ html {
     margin: 40px auto;
     width: 100%;
     min-height: 100px;
+    &__content {
+      position: relative;
+      .project-card__overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: -20px;
+        background-color: $purple;
+        z-index: 6;
+      }
+    }
 
     &__buttons {
       display: flex;
@@ -1013,7 +1140,76 @@ html {
 .contact {
   width: 100%;
   min-height: 100vh;
+  padding: 50px 0 0 0;
   background: linear-gradient($blue, $light-color);
+
+  &__form-wrapper {
+    width: 60%;
+    margin: 0 auto;
+    .contact__form {
+      display: flex;
+      flex-direction: column;
+
+      .input-wrapper {
+        margin: 25px 0 10px 0;
+
+        position: relative;
+        .input__label {
+          transition: all 0.3s ease-in-out;
+          pointer-events: none;
+          font-size: 18px;
+          font-weight: 500;
+          position: absolute;
+          top: 10px;
+          left: 5px;
+
+          &--notEmpty {
+            top: -12px;
+            font-size: 14px;
+            color: $purple;
+          }
+        }
+      }
+      .form {
+        &__send-btn {
+          margin: 25px auto 0 auto;
+        }
+        &__name,
+        &__email,
+        &__message {
+          background: transparent;
+          color: white;
+          border: none;
+          outline: none;
+          border-bottom: 3px solid $purple;
+          width: 100%;
+          transition: border 0.2s ease;
+
+          &.invalid {
+            border-color: rgb(255, 74, 74);
+          }
+
+          &:focus ~ .input__label {
+            top: -12px;
+            font-size: 14px;
+            color: $purple;
+          }
+        }
+        &__name {
+          height: 40px;
+        }
+        &__email {
+          height: 40px;
+        }
+        &__message {
+          padding: 10px 5px;
+          resize: vertical;
+          max-height: 150px;
+          min-height: 40px;
+        }
+      }
+    }
+  }
 }
 
 /* media queries */
