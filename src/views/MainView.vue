@@ -127,7 +127,12 @@
     </section>
 
     <section class="projects" id="projects">
-      <div class="project-card" v-for="(project, num) in projects" :key="num">
+      <div
+        class="project-card"
+        :class="project.current ? 'project-card--current' : ''"
+        v-for="(project, num) in projects"
+        :key="num"
+      >
         <div class="project-card__number">{{ num + 1 }}</div>
         <div class="project-card__content">
           <div class="project-card__content-title">{{ project.title }}</div>
@@ -263,6 +268,13 @@ export default {
           route: "grocery",
           title: "Список покупок",
           desc: "Немного измененный todo list с использованием Vuex.",
+        },
+        {
+          route: "portfolio3",
+          title: "Портфолио 3",
+          desc: "Сайт, на котором Вы сейчас находитесь. Третья версия потфолио, в которой дизайн стал намного приоритетнее.",
+          // highlights this card
+          // current: true,
         },
       ],
     };
@@ -481,7 +493,8 @@ export default {
       this.applyParticles();
       this.applyAboutAnimations();
       this.applyAboutQuoteAnimations();
-      this.applyProjectsAnimation();
+      // TODO: update animation nimber no width
+      // this.applyProjectsAnimation();
     },
   },
 
@@ -616,7 +629,7 @@ html {
     height: 100%;
     top: 0;
     left: 0;
-    background: linear-gradient($dark-color 60%, rgb(39, 36, 85));
+    background: linear-gradient($dark-color 60%, $blue);
     mix-blend-mode: lighten;
   }
 
@@ -701,7 +714,7 @@ html {
     height: 100%;
     top: 0;
     left: 0;
-    background: linear-gradient(rgb(39, 36, 85), $dark-color);
+    background: linear-gradient($blue, $dark-color);
     mix-blend-mode: lighten;
   }
 
@@ -825,7 +838,7 @@ html {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: $dark-color;
+  background: linear-gradient($dark-color, $blue);
   padding: 60px 0 0 0;
 
   & .project-card {
@@ -905,47 +918,51 @@ html {
       }
     }
 
-    // &__full-desc {
-    //   overflow: hidden;
-    //   height: 0;
-    //   opacity: 0;
-    //   display: flex;
-    //   justify-content: space-around;
-    //   align-items: center;
+    &--current {
+      .project-card__content {
+        position: relative;
+        .project-card__buttons,
+        &-title,
+        &-desc {
+          z-index: 2;
+          position: relative;
+        }
 
-    //   &-text {
-    //     font-size: 18px;
-    //     width: 45%;
-    //   }
+        &:after {
+          position: absolute;
+          z-index: 1;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          background: linear-gradient(
+            45deg,
+            transparent 45%,
+            rgba($purple, 0.2) 50%,
+            transparent 55%
+          );
+          background-size: 400% 400%;
+          animation: 1.5s gradient linear infinite;
 
-    //   &-images {
-    //     display: flex;
-    //     flex-direction: column;
-    //     align-items: flex-end;
-    //     width: 45%;
-    //     border-left: 1px solid $purple;
-    //     padding: 40px 0 0 0;
-
-    //     & img {
-    //       display: block;
-    //       transition: transform 0.3s ease-in-out;
-    //       width: 80%;
-    //       height: auto;
-    //       margin: -40px 0 0 0;
-
-    //       &:hover {
-    //         z-index: 50;
-    //         transform: scale(1.2) translateX(-30px);
-    //       }
-    //     }
-    //   }
-    // }
+          @keyframes gradient {
+            from {
+              background-position: 0% 50%;
+            }
+            to {
+              background-position: 100% 50%;
+            }
+          }
+        }
+      }
+    }
   }
 
   & .star {
     width: 100%;
+    padding: 150px 0;
     &__image {
-      margin: 0 auto;
+      margin: 50px auto;
       display: block;
       cursor: pointer;
 
@@ -996,7 +1013,7 @@ html {
 .contact {
   width: 100%;
   min-height: 100vh;
-  background-color: $purple;
+  background: linear-gradient($blue, $light-color);
 }
 
 /* media queries */
