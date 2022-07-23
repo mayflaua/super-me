@@ -4,14 +4,4 @@ module.exports = defineConfig({
   filenameHashing: false,
   productionSourceMap: false,
   transpileDependencies: true,
-
-  css: {
-    loaderOptions: {
-      sass: {
-        additionalData: `
-          @import "@/style/colors.scss";
-        `,
-      },
-    },
-  },
 });
