@@ -12,42 +12,54 @@ const routes = [
     path: "/",
     name: "main",
     component: MainView,
+    meta: { title: "Данил" },
   },
   {
     path: "/portfolio",
     name: "portfolio",
     component: ProjectPortfolio,
+    meta: { title: "Портфолио" },
   },
   {
     path: "/passgen",
     name: "passgen",
     component: ProjectPassGen,
+    meta: { title: "Генератор паролей" },
   },
   {
     path: "/kitten",
     name: "kitten",
     component: ProjectKitten,
+    meta: { title: "Котенок и огурцы" },
   },
   {
     path: "/portfolio2",
     name: "portfolio2",
     component: ProjectPortfolio2,
+    meta: { title: "Портфолио 2" },
   },
   {
     path: "/grocery",
     name: "grocery",
     component: ProjectGrocery,
+    meta: { title: "Список покупок" },
   },
   {
     path: "/portfolio3",
     name: "portfolio3",
     component: ProjectPortfolio3,
+    meta: { title: "Портфолио 3" },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  next();
 });
 
 export default router;
