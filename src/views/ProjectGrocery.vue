@@ -3,12 +3,14 @@
     <div class="overlays">
       <div class="overlay overlay1"></div>
       <div class="overlay overlay2">
-        <span class="overlay-text">HTML</span>
+        <span class="overlay-text">Vue</span>
       </div>
       <div class="overlay overlay3">
-        <span class="overlay-text">CSS</span>
+        <span class="overlay-text">Vuex</span>
       </div>
-      <div class="overlay overlay4"><span class="overlay-text">Vue</span></div>
+      <div class="overlay overlay4">
+        <span class="overlay-text">Element-Plus</span>
+      </div>
     </div>
     <div class="project">
       <div class="project__title">Список покупок</div>
