@@ -89,12 +89,12 @@
     <section class="about" id="about">
       <div class="about__main">
         <div class="about__basics">
-          <p class="basics__title">
+          <div class="basics__title">
             Frontend-разработчик с небольшим опытом, но с огромным энтузиазмом.
-          </p>
+          </div>
           <p class="basics__subtitle">
-            Стараюсь делать полезные, красивые и фунцкиональные веб-приложения.
-            Использую Vue 3
+            Стараюсь делать полезные, красивые и фунцкиональные
+            веб-приложения.<br />Использую Vue 3
           </p>
         </div>
         <div class="about__cards">
@@ -127,6 +127,7 @@
     </section>
 
     <section class="projects" id="projects">
+      <div class="projects__title">Проекты</div>
       <div
         class="project-card"
         :class="project.current ? 'project-card--current' : ''"
@@ -275,25 +276,26 @@ export default {
         {
           title: "Образование",
           text: [
-            "Сдав ЕГЭ в 2018 году, я поступил в Казань (КИУ) на направление прикладной информатики. Буду честен, мне не понравилось. Именно поэтому после первой сессии я бросил учебу в ВУЗе. Сейчас все открытые источники информации - мои друзья на каждый день :)",
+            "Сдав ЕГЭ в 2018 году, я поступил в Казань (КИУ) на направление прикладной информатики. Буду честен, мне не понравилось. Именно поэтому, после первой сессии, я бросил учебу в ВУЗе. Сейчас все открытые источники информации - мои друзья на каждый день :)",
           ],
         },
         {
           title: "Чем я занимаюсь?",
           text: [
-            "Frontend разработкой я начал заниматься относительно недавно. В свободное от работы время я предпочитаю пешие и велопрогулки. Так же стараюсь поддерживать в тонусе тело и голову - занимаюсь дома и занимаюсь самообразованием, не только в направлении разработки.",
+            "Frontend разработкой я начал заниматься относительно недавно. В свободное от работы время я предпочитаю пешие и велопрогулки. Вместе с тем, стараюсь поддерживать в тонусе тело и голову - поддерживую физическую и умственную активность.",
           ],
         },
         {
           title: "Цели",
           text: [
-            "Я хочу попасть в команду единомышленников, которые поделятся бесценным опытом. Общая цель - стать полноценным Frontend разработичком с большим опытом.",
+            "Я хочу попасть в команду единомышленников, которые смогут поделиться бесценным опытом. Моя главная цель - стать полноценным Frontend разработичком с большим опытом.",
           ],
         },
         {
           title: "Soft skills",
           text: [
-            "Технологии, которые я продолжаю изучать - HTML, CSS (SCSS), JS (es6+), Vue 3 (Vuex, Vue router), Git Решения, которых я коснулся - Element-Plus, kaboom.js, GSAP, SVG, jQuery, PHP8",
+            "Самостоятельно за собой я заметил навыки самообучения, мотивированности к развитию, стрессоустойчивостьб эмоциональный интеллект.",
+            "Коллеги и близкие говорят: ",
           ],
         },
         {
@@ -309,18 +311,18 @@ export default {
         {
           route: "portfolio",
           title: "Портфолио",
-          desc: "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. И здесь же и началось изучение JS со всеми сопутствующими начинающему ошибками и неудачными решениями.",
+          desc: "Первое, что я решил сделать, освоя HTML/CSS - это сверстать сайт-портфолио в стилистике десктоп приложения. Здесь же и началось изучение JS со всеми сопутствующими начинающему неудачными решениями.",
 
           link: "https://mayflaua.github.io",
         },
         {
           route: "passgen",
           title: "Генератор паролей",
-          desc: "Чтобы углубиться в JavaScript, я решил написать генератор паролей. Но сложность была не в алгоритме генерации, а в анимации генерации пароля.",
+          desc: "Чтобы углубиться в JavaScript, я решил написать генератор паролей. Сложность была не в самом алгоритме, а в анимации генерации пароля.",
         },
         {
           route: "kitten",
-          title: "Котенок и огурцы",
+          title: '"Котенок и огурцы"',
           desc: "Игра, схожая по механихе с Google Dinosaur game, в которой котенку нужно просто бежать вперед, избегая огурцы и летучих мышей.",
         },
         {
@@ -333,12 +335,12 @@ export default {
         {
           route: "grocery",
           title: "Список покупок",
-          desc: "Немного измененный todo list с использованием Vuex.",
+          desc: "Немного измененный to do list с использованием Vuex.",
         },
         {
           route: "portfolio3",
           title: "Портфолио 3",
-          desc: "Сайт, на котором Вы сейчас находитесь. Третья версия потфолио, в которой дизайн стал намного приоритетнее.",
+          desc: "Сайт, на котором Вы сейчас находитесь. Третья версия портфолио, в которой дизайн стал намного приоритетнее.",
           // highlights this card
           // current: true,
         },
@@ -498,9 +500,9 @@ export default {
           opacity: 1,
           ease: "power1.inOut",
           scrollTrigger: {
-            trigger: "#projects",
-            start: "-10vh bottom",
-            end: "-30% center",
+            trigger: ".about__quote-divider",
+            start: "center 60%",
+            end: "+=10%",
             scrub: true,
           },
         }
@@ -516,9 +518,9 @@ export default {
           opacity: 1,
           ease: "power1.inOut",
           scrollTrigger: {
-            trigger: "#projects",
-            start: "-5% bottom",
-            end: "-20% center",
+            trigger: ".about__quote-divider",
+            start: "center 50%",
+            end: "+=10%",
             scrub: true,
           },
         }
@@ -639,6 +641,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/style/particles.scss";
+@import "@/style/colors.scss";
 
 /* slide down arrow animations */
 @keyframes arrow {
@@ -851,7 +854,7 @@ html {
 
     .card {
       width: 100%;
-      margin: 15px auto;
+      margin: 0 auto 15px auto;
       border: 2px solid $purple;
 
       &__head {
@@ -955,6 +958,14 @@ html {
   min-height: 100vh;
   background: linear-gradient($dark-color, $blue);
   padding: 60px 0 0 0;
+
+  &__title {
+    font-weight: 600;
+    font-size: clamp(28px, 3vw, 40px);
+    text-align: center;
+    color: $purple;
+    text-shadow: 0 3px 6px $blue;
+  }
 
   & .project-card {
     display: flex;
@@ -1128,10 +1139,10 @@ html {
     }
     &__text {
       text-align: center;
-      width: 100%;
+      width: 90%;
       font-size: 1rem;
       color: lighten($light-color, 20);
-      margin: 1em 0 0 0;
+      margin: 1em auto 0 auto;
     }
   }
 }
@@ -1173,6 +1184,7 @@ html {
       .form {
         &__send-btn {
           margin: 25px auto 0 auto;
+          width: 140px;
         }
         &__name,
         &__email,
