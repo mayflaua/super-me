@@ -176,44 +176,88 @@
         <form action="" class="contact__form">
           <div class="input-wrapper">
             <input
-              id="input1"
               class="input form__name"
               type="text"
               name="name"
               required
-              pattern=".{3,}"
               v-model="formName"
-              @input="highlightInputs(validateForm())"
             /><span
               class="input__label"
               :class="formName ? 'input__label--notEmpty' : ''"
               >ИМЯ</span
             >
           </div>
-          <div class="input-wrapper">
-            <input
-              id="input2"
-              type="email"
-              class="input form__email"
-              name="email"
-              required
-              v-model="formEmail"
-              @input="highlightInputs(validateForm())"
-            /><span
-              class="input__label"
-              :class="formEmail ? 'input__label--notEmpty' : ''"
-              >EMAIL</span
+          <div class="contact-method">
+            <div
+              class="input-wrapper"
+              :class="
+                selectedContactMethod == 'email'
+                  ? 'input-wrapper--selected'
+                  : ''
+              "
             >
+              <div
+                class="input-radio"
+                @click="selectedContactMethod = 'email'"
+                :class="
+                  selectedContactMethod == 'email'
+                    ? 'input-radio--selected'
+                    : ''
+                "
+              ></div>
+              <input
+                type="email"
+                class="input form__email"
+                name="email"
+                required
+                v-model="formEmail"
+                @focus="selectedContactMethod = 'email'"
+              /><span
+                class="input__label"
+                :class="formEmail ? 'input__label--notEmpty' : ''"
+                >EMAIL</span
+              >
+            </div>
+            <div class="contact-method__divider">/</div>
+            <div
+              class="input-wrapper"
+              :class="
+                selectedContactMethod == 'telegram'
+                  ? 'input-wrapper--selected'
+                  : ''
+              "
+            >
+              <div
+                class="input-radio"
+                @click="selectedContactMethod = 'telegram'"
+                :class="
+                  selectedContactMethod == 'telegram'
+                    ? 'input-radio--selected'
+                    : ''
+                "
+              ></div>
+              <input
+                type="text"
+                class="input form__telegram"
+                name="telegram"
+                required
+                v-model="formTelegram"
+                @focus="selectedContactMethod = 'telegram'"
+              /><span
+                class="input__label"
+                :class="formTelegram ? 'input__label--notEmpty' : ''"
+                >TELEGRAM</span
+              >
+            </div>
           </div>
+
           <div class="input-wrapper">
             <textarea
-              id="input3"
               class="input form__message"
               name="message"
               rows="4"
               required
               v-model="formMessage"
-              @input="highlightInputs(validateForm())"
             ></textarea
             ><span
               class="input__label"
@@ -264,13 +308,15 @@ export default {
       scrollAllowed: false,
       helloAnimationDone: false,
       menuAppearingOptions: {
-        delay: [200, 1000],
+        delay: [30, 60],
       },
       isLoading: true,
 
       formName: "",
       formEmail: "",
       formMessage: "",
+      formTelegram: "",
+      selectedContactMethod: "email",
 
       cards: [
         {
@@ -358,9 +404,9 @@ export default {
 
   methods: {
     sendForm() {
-      let res = this.validateForm();
-      if (res === 0) {
+      if (this.validateForm()) {
         let data = $(".contact__form").serialize();
+        data += `&method=${this.selectedContactMethod}`;
         $.ajax({
           url: "https://letmepresentmyself.site/send.php",
           method: "post",
@@ -371,41 +417,48 @@ export default {
         });
         this.formName = "";
         this.formEmail = "";
+        this.formTelegram = "";
         this.formMessage = "";
-      } else {
-        this.highlightInputs(res);
-      }
-    },
-
-    highlightInputs(nums) {
-      $(`.input`).removeClass("invalid");
-      if (nums) {
-        this.$nextTick(() =>
-          nums.forEach((num) => $(`#input${num}`).addClass("invalid"))
-        );
+        $(".contact__form .invalid").removeClass("invalid");
       }
     },
 
     validateForm() {
-      // 0 if valid or invalid input numbers array ( 1 / 2 / 3 )
-      let res = [];
+      const [name, email, telegram, message] = $(".contact__form .input");
+      // validator
+      const validate = {
+        name: (el) => el.value.length > 2,
+        email: (el) =>
+          el.value.match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          ),
+        telegram: (el) => el.value.length >= 5,
+        message: (el) => el.value.split(" ").length > 1,
+      };
+      // reset inputs validity style
+      [name, email, telegram, message].forEach((el) => {
+        el.classList.remove("invalid");
+      });
 
-      // false if name is less than 2 characters
-      if (this.formName.length <= 2) res.push(1);
+      const nameValid = validate.name(name);
+      const emailValid = validate.email(email);
+      const telegramValid = validate.telegram(telegram);
+      const messageValid = validate.message(message);
 
-      // false if email dont match email regexp
-      if (
-        !this.formEmail.match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )
-      )
-        res.push(2);
+      if (!nameValid) name.classList.add("invalid");
+      if (!emailValid) email.classList.add("invalid");
+      if (!telegramValid) telegram.classList.add("invalid");
+      if (!messageValid) message.classList.add("invalid");
 
-      // false if message has less than 1 word
-      if (this.formMessage.split(" ").length <= 1) res.push(3);
+      // consider only selected contact method
+      let results = [nameValid, messageValid];
+      this.selectedContactMethod == "email"
+        ? results.push(emailValid)
+        : results.push(telegramValid);
 
-      return res.length === 0 ? 0 : res;
+      return results.every((el) => el);
     },
+
     applyAboutAnimations() {
       // title animation
       gsap.fromTo(
@@ -448,7 +501,7 @@ export default {
         }
       );
       // cards animation
-      document.querySelectorAll(".card").forEach((card, index) => {
+      document.querySelectorAll(".card").forEach((card) => {
         gsap.fromTo(
           card,
           {
@@ -457,10 +510,9 @@ export default {
           },
           {
             scrollTrigger: {
-              trigger: ".card:first-child",
-              start: `${65 * index}px bottom`,
+              trigger: card,
+              start: "top 96%",
               endTrigger: ".about__main",
-              end: `bottom bottom`,
             },
             borderWidth: 2,
             ease: "power2.inOut",
@@ -468,24 +520,21 @@ export default {
           }
         );
       });
-      document
-        .querySelectorAll(".card__head-overlay")
-        .forEach((overlay, index) => {
-          gsap.fromTo(
-            overlay,
-            { width: "100%" },
-            {
-              width: "0%",
-              ease: "power2.in",
-              scrollTrigger: {
-                trigger: ".card:first-child",
-                start: `${65 * index}px bottom`,
-                endTrigger: ".about__main",
-                end: `bottom bottom`,
-              },
-            }
-          );
-        });
+      document.querySelectorAll(".card__head-overlay").forEach((overlay) => {
+        gsap.fromTo(
+          overlay,
+          { width: "100%" },
+          {
+            width: "0%",
+            ease: "power2.in",
+            scrollTrigger: {
+              trigger: overlay,
+              start: "top 96%",
+              endTrigger: ".about__main",
+            },
+          }
+        );
+      });
     },
 
     applyAboutQuoteAnimations() {
@@ -535,9 +584,9 @@ export default {
           ease: "none",
 
           scrollTrigger: {
-            trigger: "#projects",
-            start: "-60% center",
-            end: "-30% 60%",
+            trigger: ".about__quote-divider",
+            start: "bottom bottom",
+            end: "+=5%",
             scrub: true,
           },
         }
@@ -556,12 +605,16 @@ export default {
     },
 
     applyProjectsAnimation() {
-      gsap.to(".project-card__overlay", {
-        width: "0",
-        duration: 0.4,
-        stagger: 0.2,
-        scrollTrigger: ".project-card__number",
-        ease: "ease",
+      document.querySelectorAll(".project-card__overlay").forEach((overlay) => {
+        gsap.to(overlay, {
+          width: "0",
+          duration: 0.4,
+          scrollTrigger: {
+            trigger: overlay,
+            toggleActions: "play none play reset",
+          },
+          ease: "ease",
+        });
       });
     },
 
@@ -964,7 +1017,6 @@ html {
     font-size: clamp(28px, 3vw, 40px);
     text-align: center;
     color: $purple;
-    text-shadow: 0 3px 6px $blue;
   }
 
   & .project-card {
@@ -1188,7 +1240,8 @@ html {
         }
         &__name,
         &__email,
-        &__message {
+        &__message,
+        &__telegram {
           background: transparent;
           color: white;
           border: none;
@@ -1207,12 +1260,12 @@ html {
             color: $purple;
           }
         }
-        &__name {
+        &__name,
+        &__email,
+        &__telegram {
           height: 40px;
         }
-        &__email {
-          height: 40px;
-        }
+
         &__message {
           padding: 10px 5px;
           resize: vertical;
@@ -1220,6 +1273,71 @@ html {
           min-height: 40px;
         }
       }
+    }
+  }
+
+  &-method {
+    display: flex;
+    justify-content: space-between;
+
+    .input-wrapper {
+      width: 45%;
+      position: relative;
+
+      .input-radio {
+        display: none;
+
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        top: 13px;
+        left: -40px;
+        background: transparent;
+        border: 2px solid $purple;
+        border-radius: 50%;
+
+        &:before {
+          transition: all 0.2s ease;
+          content: "";
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          position: absolute;
+          top: 3px;
+          left: 3px;
+          background: $purple;
+          animation: 3s flicker infinite alternate;
+
+          opacity: 0;
+          transform: scale(0.2);
+        }
+
+        &--selected:before {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .input,
+      .input__label {
+        opacity: 0.5;
+      }
+
+      &--selected {
+        .input,
+        .input__label {
+          opacity: 1;
+        }
+      }
+    }
+
+    &__divider {
+      width: 10%;
+      text-align: center;
+      margin: 25px 0 10px 0;
+      line-height: 40px;
+      color: $purple;
+      font-weight: 600;
     }
   }
 }
@@ -1252,34 +1370,31 @@ html {
     }
   }
 
-  .projects {
-    .project-card {
-      &__content-desc {
-        font-size: 16px;
-      }
-      &__full-desc {
-        flex-direction: column;
+  .contact {
+    &-method {
+      flex-direction: column;
 
-        &-text,
-        &-images {
-          width: 90%;
+      .input-wrapper {
+        width: 100%;
+
+        .input-radio {
+          display: block;
         }
 
-        &-images {
-          align-items: center;
-          flex-direction: row;
-          flex-wrap: wrap;
-          justify-content: center;
-          border-top: 1px solid $purple;
-          border-left: none;
-          img {
-            width: 90%;
-            margin: 5px;
-            &:hover {
-              transform: scale(1.2);
-            }
+        .input,
+        .input__label {
+          pointer-events: none;
+        }
+        &--selected {
+          .input,
+          .input__label {
+            pointer-events: auto;
           }
         }
+      }
+
+      &__divider {
+        display: none;
       }
     }
   }
