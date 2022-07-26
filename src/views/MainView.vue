@@ -127,7 +127,27 @@
     </section>
 
     <section class="projects" id="projects">
-      <div class="projects__title">Проекты</div>
+      <!-- TODO: make this title krasivoe -->
+      <div class="projects__title">
+        <svg class="circles" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+              <feOffset dx="5" dy="5" result="offsetblur" />
+              <feFlood flood-color="black" />
+              <feComposite in2="offsetblur" operator="in" />
+              <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <circle class="circle circle1" r="30vw" cx="50%" cy="30vw" />
+          <circle class="circle circle2" r="20vw" cx="50%" cy="30vw" />
+          <circle class="circle circle3" r="10vw" cx="50%" cy="30vw" />
+        </svg>
+        Проекты
+      </div>
       <div
         class="project-card"
         :class="project.current ? 'project-card--current' : ''"
@@ -160,6 +180,7 @@
         </div>
       </div>
       <div class="star">
+        <div class="star__background"></div>
         <a
           class="star__image"
           href="https://apod.nasa.gov/apod/ap010302.html"
@@ -1009,7 +1030,7 @@ html {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient($dark-color, $blue);
+  background: $dark-color;
   padding: 60px 0 0 0;
 
   &__title {
@@ -1017,6 +1038,44 @@ html {
     font-size: clamp(28px, 3vw, 40px);
     text-align: center;
     color: $purple;
+    position: relative;
+    text-shadow: 0 5px 2px black;
+
+    .circles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      overflow: visible;
+
+      .circle {
+        fill: none;
+        stroke: $purple;
+        stroke-width: 5;
+        stroke-dasharray: 20% 0;
+        stroke-dashoffset: -20%;
+        stroke-opacity: 0.2;
+        animation: 40s circle ease-in infinite alternate;
+        filter: url(#shadow);
+
+        &2 {
+          animation-delay: 30%;
+          animation-direction: reverse;
+          animation-duration: 30s;
+        }
+        &3 {
+          animation-delay: -30%;
+          animation-duration: 20s;
+        }
+        @keyframes circle {
+          to {
+            stroke-dasharray: 0 200%;
+            stroke-dash-offset: 20%;
+            stroke-opacity: 0.4;
+          }
+        }
+      }
+    }
   }
 
   & .project-card {
@@ -1151,6 +1210,38 @@ html {
   & .star {
     width: 100%;
     padding: 150px 0;
+    position: relative;
+    &__background {
+      box-shadow: 0 0 100px 80px $dark-color inset;
+      position: absolute;
+      background: url(@/assets/space.jpg);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.7;
+      mix-blend-mode: lighten;
+      background-position: 0% 0%;
+      animation: 120s space ease-in-out infinite alternate;
+
+      @keyframes space {
+        0% {
+          background-position: 50% 50%;
+        }
+        25% {
+          background-position: 70% 35%;
+        }
+        50% {
+          background-position: 25% 25%;
+        }
+        75% {
+          background-position: 25% 90%;
+        }
+        100% {
+          background-position: 100% 100%;
+        }
+      }
+    }
     &__image {
       margin: 50px auto;
       display: block;
@@ -1190,10 +1281,11 @@ html {
       }
     }
     &__text {
+      position: relative;
       text-align: center;
       width: 90%;
       font-size: 1rem;
-      color: lighten($light-color, 20);
+      color: #bbb;
       margin: 1em auto 0 auto;
     }
   }
@@ -1204,7 +1296,7 @@ html {
   width: 100%;
   min-height: 100vh;
   padding: 50px 0 0 0;
-  background: linear-gradient($blue, $light-color);
+  background: linear-gradient($dark-color, $blue);
 
   &__form-wrapper {
     width: 60%;
@@ -1215,8 +1307,8 @@ html {
 
       .input-wrapper {
         margin: 25px 0 10px 0;
-
         position: relative;
+
         .input__label {
           transition: all 0.3s ease-in-out;
           pointer-events: none;
@@ -1263,6 +1355,7 @@ html {
         &__name,
         &__email,
         &__telegram {
+          position: relative;
           height: 40px;
         }
 
@@ -1297,7 +1390,8 @@ html {
         border-radius: 50%;
 
         &:before {
-          transition: all 0.2s ease;
+          transition: opacity 0.2s ease,
+            transform 0.2s cubic-bezier(0.26, 0.15, 0.82, 5);
           content: "";
           width: 10px;
           height: 10px;
