@@ -40,7 +40,7 @@
           <div class="project__desc-headline project__desc-headline--dev">
             Разработка
           </div>
-          <div class="project__dev-item" v-for="item in devItems" :key="item">
+          <div v-for="item in devItems" :key="item" class="project__dev-item">
             <div class="project__desc-label">{{ item.title }}</div>
             <div class="project__desc-text project__desc-text--smaller">
               {{ item.desc }}
@@ -100,6 +100,22 @@ export default {
     ],
   }),
 
+  mounted() {
+    this.$nextTick(() => {
+      window.scrollTo(0, 0);
+      this.setScrolling(false);
+      overlays = gsap.timeline();
+      wilTl = gsap.timeline();
+      this.applyOverlayAnimation();
+
+      overlays.play().then(() => this.setScrolling(true));
+    });
+  },
+  beforeUnmount() {
+    overlays.kill();
+    wilTl.kill();
+  },
+
   methods: {
     setScrolling(bool) {
       // disable scrolling if FALSE passed as argument
@@ -157,22 +173,6 @@ export default {
       this.isAnimating = false;
       this.applyDevAnimations();
     },
-  },
-
-  mounted() {
-    this.$nextTick(() => {
-      window.scrollTo(0, 0);
-      this.setScrolling(false);
-      overlays = gsap.timeline();
-      wilTl = gsap.timeline();
-      this.applyOverlayAnimation();
-
-      overlays.play().then(() => this.setScrolling(true));
-    });
-  },
-  beforeUnmount() {
-    overlays.kill();
-    wilTl.kill();
   },
 };
 </script>

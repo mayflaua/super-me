@@ -2,7 +2,7 @@
   <router-view v-slot="{ Component }">
     <!-- <keep-alive>  -->
     <keep-alive include="MainView">
-      <component class="component" :is="Component"
+      <component :is="Component" class="component"
     /></keep-alive>
   </router-view>
 </template>

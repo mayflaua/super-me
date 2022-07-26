@@ -21,11 +21,11 @@
         <div class="project__desc-images project__desc-images--first">
           <img
             v-if="!imageClicked"
-            @click="imageClicked = true"
             class="project__desc-image"
             src="@/assets/previews/password.gif"
+            @click="imageClicked = true"
           />
-          <div class="image-overlay" v-show="!imageClicked">
+          <div v-show="!imageClicked" class="image-overlay">
             Нажмите, чтобы попробовать
           </div>
           <password-generator v-show="imageClicked" class="password" />
@@ -45,11 +45,11 @@
         </div>
         <div class="conclusions">
           <a
+            v-for="item in whatILearnedList"
+            :key="item.title"
             :href="item.link"
             target="_blank"
             class="conclusion"
-            v-for="item in whatILearnedList"
-            :key="item.title"
           >
             <div class="conclusion__title">{{ item.title }}</div>
             <div class="conclusion__desc">{{ item.desc }}</div>
@@ -93,6 +93,23 @@ export default {
       },
     ],
   }),
+
+  mounted() {
+    this.$nextTick(() => {
+      window.scrollTo(0, 0);
+      this.setScrolling(false);
+      overlays = gsap.timeline();
+      wilTl = gsap.timeline();
+      this.applyOverlayAnimation();
+
+      overlays.play().then(() => this.setScrolling(true));
+    });
+  },
+
+  beforeUnmount() {
+    overlays.kill();
+    wilTl.kill();
+  },
 
   methods: {
     setScrolling(bool) {
@@ -191,23 +208,6 @@ export default {
       this.applyWhatILearnedAnimations();
       this.animationsApplied = true;
     },
-  },
-
-  mounted() {
-    this.$nextTick(() => {
-      window.scrollTo(0, 0);
-      this.setScrolling(false);
-      overlays = gsap.timeline();
-      wilTl = gsap.timeline();
-      this.applyOverlayAnimation();
-
-      overlays.play().then(() => this.setScrolling(true));
-    });
-  },
-
-  beforeUnmount() {
-    overlays.kill();
-    wilTl.kill();
   },
 };
 </script>

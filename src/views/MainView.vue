@@ -4,89 +4,89 @@
   <main class="content">
     <page-preloader v-if="isLoading" />
     <transition name="fade">
-      <header class="menu" v-if="helloAnimationDone">
+      <header v-if="helloAnimationDone" class="menu">
         <nav class="menu__list">
           <glitched-writer
             text="обо мне"
             tag="div"
             class="menu__list-item"
-            @click="goTo('about')"
             preset="cosmic"
             :options="menuAppearingOptions"
             appear
+            @click="goTo('about')"
           />
           <glitched-writer
             text="проекты"
             tag="div"
             class="menu__list-item"
-            @click="goTo('projects')"
             preset="cosmic"
             :options="menuAppearingOptions"
             appear
+            @click="goTo('projects')"
           />
           <glitched-writer
             text="связаться"
             tag="div"
             class="menu__list-item"
-            @click="goTo('contact')"
             preset="cosmic"
             :options="menuAppearingOptions"
             appear
+            @click="goTo('contact')"
           />
         </nav></header
     ></transition>
-    <section class="hello" id="hello">
+    <section id="hello" class="hello">
       <glitched-writer
+        v-if="!isLoading"
         text="Привет. "
         class="hello__title"
         preset="encrypted"
         :options="{ delay: 1000, interval: 60 }"
         appear
-        v-if="!isLoading"
       />
       <glitched-writer
+        v-if="!isLoading"
         text="Я Данил."
         class="hello__title"
         preset="encrypted"
         :options="{ delay: 2500, interval: 60 }"
         appear
-        v-if="!isLoading"
       />
       <glitched-writer
+        v-if="!isLoading"
         tag="div"
         text="Познакомимся?"
         class="hello__title"
         preset="encrypted"
-        @finish="saidHello"
         :options="{ delay: 4000, interval: 80 }"
         appear
-        v-if="!isLoading"
+        @finish="saidHello"
       />
       <!-- slide down arrows -->
       <transition name="fade">
         <svg
-          class="hello__arrow"
           v-show="helloAnimationDone"
+          class="hello__arrow"
           @click="goTo('about')"
         >
-          <path d="M0 0 L30 32 L60 0"></path>
-          <path d="M0 20 L30 52 L60 20"></path>
-          <path d="M0 40 L30 72 L60 40"></path></svg
+          <path d="M0 0 L30 32 L60 0" />
+          <path d="M0 20 L30 52 L60 20" />
+          <path d="M0 40 L30 72 L60 40" /></svg
       ></transition>
       <!-- background particles -->
       <transition name="fade">
-        <div class="particles" v-show="helloAnimationDone" v-if="!isMobile">
-          <div data-depth="0.3" class="particle particle1"></div>
-          <div data-depth="0.2" class="particle particle2"></div>
-          <div data-depth="0.1" class="particle particle3"></div></div
+        <div v-show="helloAnimationDone" v-if="!isMobile" class="particles">
+          <div data-depth="0.3" class="particle particle1" />
+          <div data-depth="0.2" class="particle particle2" />
+          <div data-depth="0.1" class="particle particle3" /></div
       ></transition>
       <!-- background gradient -->
       <transition name="fade"
-        ><div class="hello__bg" v-show="helloAnimationDone"></div
-      ></transition>
+        ><div v-show="helloAnimationDone" class="hello__bg"
+      /></transition>
     </section>
 
-    <section class="about" id="about">
+    <section id="about" class="about">
       <div class="about__main">
         <div class="about__basics">
           <div class="basics__title">
@@ -98,12 +98,12 @@
           </p>
         </div>
         <div class="about__cards">
-          <div class="card" v-for="(card, i) in cards" :key="i">
+          <div v-for="(card, i) in cards" :key="i" class="card">
             <div class="card__head">
               {{ card.title }}
-              <div class="card__head-overlay"></div>
+              <div class="card__head-overlay" />
             </div>
-            <div class="card__content" v-html="card.text.join(`<br />`)"></div>
+            <div class="card__content" v-html="card.text.join(`<br />`)" />
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@
           <span class="about__quote-text about__quote-text--upper"
             >делай то, что любишь
           </span>
-          <div class="about__quote-divider"></div>
+          <div class="about__quote-divider" />
         </div>
         <div class="about__quote-text-wrapper">
           <span class="about__quote-text about__quote-text--lower"
@@ -122,11 +122,11 @@
       </div>
       <!-- background gradient -->
       <transition name="fade"
-        ><div class="about__bg" v-show="helloAnimationDone"></div
-      ></transition>
+        ><div v-show="helloAnimationDone" class="about__bg"
+      /></transition>
     </section>
 
-    <section class="projects" id="projects">
+    <section id="projects" class="projects">
       <!-- TODO: make this title krasivoe -->
       <div class="projects__title">
         <svg class="circles" xmlns="http://www.w3.org/2000/svg">
@@ -149,14 +149,14 @@
         Проекты
       </div>
       <div
-        class="project-card"
-        :class="project.current ? 'project-card--current' : ''"
         v-for="(project, num) in projects"
         :key="num"
+        class="project-card"
+        :class="project.current ? 'project-card--current' : ''"
       >
         <div class="project-card__number">{{ num + 1 }}</div>
         <div class="project-card__content">
-          <div class="project-card__overlay"></div>
+          <div class="project-card__overlay" />
           <div class="project-card__content-title">{{ project.title }}</div>
           <div class="project-card__content-desc">
             {{ project.desc }}
@@ -169,10 +169,10 @@
             </div>
 
             <a
+              v-if="project.link"
               class="project-card__button"
               :href="project.link"
               target="_blank"
-              v-if="project.link"
             >
               <div class="project-card__button-text">перейти</div>
             </a>
@@ -180,32 +180,32 @@
         </div>
       </div>
       <div class="star">
-        <div class="star__background"></div>
+        <div class="star__background" />
         <a
           class="star__image"
           href="https://apod.nasa.gov/apod/ap010302.html"
           target="_blank"
-        ></a>
+        />
         <div class="star__text">
           Изображение молодой звезды, сделанное NASA в день моего рождения
         </div>
       </div>
     </section>
 
-    <section class="contact" id="contact">
+    <section id="contact" class="contact">
       <div class="contact__form-wrapper">
         <form action="" class="contact__form">
           <div class="input-wrapper">
             <input
+              v-model="formName"
               class="input form__name"
               type="text"
               name="name"
               required
-              v-model="formName"
             /><span
               class="input__label"
               :class="formName ? 'input__label--notEmpty' : ''"
-              >ИМЯ</span
+              >{{ nameValid ? "ИМЯ" : ">2 СИМВОЛОВ" }}</span
             >
           </div>
           <div class="contact-method">
@@ -219,24 +219,30 @@
             >
               <div
                 class="input-radio"
-                @click="selectedContactMethod = 'email'"
                 :class="
                   selectedContactMethod == 'email'
                     ? 'input-radio--selected'
                     : ''
                 "
-              ></div>
+                @click="selectedContactMethod = 'email'"
+              />
               <input
+                v-model="formEmail"
                 type="email"
                 class="input form__email"
                 name="email"
                 required
-                v-model="formEmail"
                 @focus="selectedContactMethod = 'email'"
               /><span
                 class="input__label"
                 :class="formEmail ? 'input__label--notEmpty' : ''"
-                >EMAIL</span
+                >{{
+                  emailValid
+                    ? "EMAIL"
+                    : selectedContactMethod == "email"
+                    ? "example@mail.com"
+                    : "EMAIL"
+                }}</span
               >
             </div>
             <div class="contact-method__divider">/</div>
@@ -250,46 +256,51 @@
             >
               <div
                 class="input-radio"
-                @click="selectedContactMethod = 'telegram'"
                 :class="
                   selectedContactMethod == 'telegram'
                     ? 'input-radio--selected'
                     : ''
                 "
-              ></div>
+                @click="selectedContactMethod = 'telegram'"
+              />
               <input
+                v-model="formTelegram"
                 type="text"
                 class="input form__telegram"
                 name="telegram"
                 required
-                v-model="formTelegram"
                 @focus="selectedContactMethod = 'telegram'"
               /><span
                 class="input__label"
                 :class="formTelegram ? 'input__label--notEmpty' : ''"
-                >TELEGRAM</span
+                >{{
+                  emailValid
+                    ? "TELEGRAM"
+                    : selectedContactMethod == "telegram"
+                    ? ">4 СИМВОЛОВ"
+                    : "TELEGRAM"
+                }}</span
               >
             </div>
           </div>
 
           <div class="input-wrapper">
             <textarea
+              v-model="formMessage"
               class="input form__message"
               name="message"
               rows="4"
               required
-              v-model="formMessage"
-            ></textarea
-            ><span
+            /><span
               class="input__label"
               :class="formMessage ? 'input__label--notEmpty' : ''"
-              >СООБЩЕНИЕ</span
+              >{{ messageValid ? "СООБЩЕНИЕ" : ">1 СЛОВА" }}</span
             >
           </div>
           <back-button
             class="form__send-btn"
-            @click.prevent="sendForm"
             text="ОТПРАВИТЬ"
+            @click.prevent="sendForm"
           />
         </form>
       </div>
@@ -338,6 +349,11 @@ export default {
       formMessage: "",
       formTelegram: "",
       selectedContactMethod: "email",
+
+      nameValid: true,
+      emailValid: true,
+      telegramValid: true,
+      messageValid: true,
 
       cards: [
         {
@@ -423,6 +439,28 @@ export default {
     },
   },
 
+  mounted() {
+    window.scrollY == 0 ? this.setScrolling(false) : null;
+
+    document.onreadystatechange = () => {
+      if (document.readyState == "complete") {
+        this.initAll();
+        this.isLoading = false;
+      }
+    };
+  },
+
+  activated() {
+    window.scroll(0, this.scrollPositionBeforeLeaving);
+
+    this.firstLoad
+      ? (this.firstLoad = false)
+      : pageTl.reverse().then(() => {
+          document.querySelector(".content").style.transform = "none";
+          this.setScrolling(true);
+        });
+  },
+
   methods: {
     sendForm() {
       if (this.validateForm()) {
@@ -461,21 +499,21 @@ export default {
         el.classList.remove("invalid");
       });
 
-      const nameValid = validate.name(name);
-      const emailValid = validate.email(email);
-      const telegramValid = validate.telegram(telegram);
-      const messageValid = validate.message(message);
+      this.nameValid = validate.name(name);
+      this.emailValid = validate.email(email);
+      this.telegramValid = validate.telegram(telegram);
+      this.messageValid = validate.message(message);
 
-      if (!nameValid) name.classList.add("invalid");
-      if (!emailValid) email.classList.add("invalid");
-      if (!telegramValid) telegram.classList.add("invalid");
-      if (!messageValid) message.classList.add("invalid");
+      if (!this.nameValid) name.classList.add("invalid");
+      if (!this.emailValid) email.classList.add("invalid");
+      if (!this.telegramValid) telegram.classList.add("invalid");
+      if (!this.messageValid) message.classList.add("invalid");
 
       // consider only selected contact method
-      let results = [nameValid, messageValid];
+      let results = [this.nameValid, this.messageValid];
       this.selectedContactMethod == "email"
-        ? results.push(emailValid)
-        : results.push(telegramValid);
+        ? results.push(this.emailValid)
+        : results.push(this.telegramValid);
 
       return results.every((el) => el);
     },
@@ -687,28 +725,6 @@ export default {
       this.applyAboutQuoteAnimations();
       this.applyProjectsAnimation();
     },
-  },
-
-  mounted() {
-    window.scrollY == 0 ? this.setScrolling(false) : null;
-
-    document.onreadystatechange = () => {
-      if (document.readyState == "complete") {
-        this.initAll();
-        this.isLoading = false;
-      }
-    };
-  },
-
-  activated() {
-    window.scroll(0, this.scrollPositionBeforeLeaving);
-
-    this.firstLoad
-      ? (this.firstLoad = false)
-      : pageTl.reverse().then(() => {
-          document.querySelector(".content").style.transform = "none";
-          this.setScrolling(true);
-        });
   },
 };
 </script>
@@ -1055,7 +1071,7 @@ html {
         stroke-dasharray: 20% 0;
         stroke-dashoffset: -20%;
         stroke-opacity: 0.2;
-        animation: 40s circle ease-in infinite alternate;
+        animation: 60s circle ease-in infinite alternate;
         filter: url(#shadow);
 
         &2 {
@@ -1065,13 +1081,12 @@ html {
         }
         &3 {
           animation-delay: -30%;
-          animation-duration: 20s;
+          animation-duration: 40s;
         }
         @keyframes circle {
           to {
             stroke-dasharray: 0 200%;
             stroke-dash-offset: 20%;
-            stroke-opacity: 0.4;
           }
         }
       }
@@ -1222,6 +1237,7 @@ html {
       opacity: 0.7;
       mix-blend-mode: lighten;
       background-position: 0% 0%;
+      background-size: 50%;
       animation: 120s space ease-in-out infinite alternate;
 
       @keyframes space {
@@ -1499,6 +1515,14 @@ html {
     width: 120px;
     &__text {
       font-size: 14px;
+    }
+  }
+
+  .contact__form {
+    .input-wrapper {
+      .input__label {
+        font-size: 14px !important;
+      }
     }
   }
 }

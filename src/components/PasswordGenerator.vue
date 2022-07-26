@@ -15,7 +15,7 @@
         <label class="options-length__label" for="length">длина</label>
       </div>
       <div class="options options-symbols">
-        <input type="checkbox" id="symbols" />
+        <input id="symbols" type="checkbox" />
         <div class="checkbox"></div>
         <label for="symbols">cимволы</label>
         <div class="options__tip">
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="options options-uppercase">
-        <input type="checkbox" id="uppercase" />
+        <input id="uppercase" type="checkbox" />
         <div class="checkbox"></div>
         <label for="uppercase">буквы верхнего регистра</label>
         <div class="options__tip">
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="options options-lowercase">
-        <input type="checkbox" id="lowercase" />
+        <input id="lowercase" type="checkbox" />
         <div class="checkbox"></div>
         <label for="lowercase">буквы нижнего регистра</label>
         <div class="options__tip">
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="options options-numbers">
-        <input type="checkbox" id="numbers" />
+        <input id="numbers" type="checkbox" />
         <div class="checkbox"></div>
         <label for="numbers">цифры</label>
         <div class="options__tip">
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="options options-averaging">
-        <input type="checkbox" id="averaging" />
+        <input id="averaging" type="checkbox" />
         <div class="checkbox"></div>
         <label for="averaging">усреднение</label>
         <div class="options__tip">

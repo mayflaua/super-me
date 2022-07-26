@@ -1,6 +1,6 @@
 <template>
   <div class="page-loader">
-    <div class="reload" v-show="needReload">
+    <div v-show="needReload" class="reload">
       Что то пошло не так, простите.<br />Перезагружу страницу.
     </div>
     <div class="loader">
@@ -17,14 +17,6 @@ export default {
     reloadTimer: null,
     needReload: false,
   }),
-  methods: {
-    reload() {
-      this.needReload = true;
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    },
-  },
   mounted() {
     this.reloadTimer = setTimeout(() => {
       this.reload();
@@ -33,6 +25,14 @@ export default {
   },
   beforeUnmount() {
     clearTimeout(this.reloadTimer);
+  },
+  methods: {
+    reload() {
+      this.needReload = true;
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    },
   },
 };
 </script>
