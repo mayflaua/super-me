@@ -714,9 +714,8 @@ export default {
     goTo(section) {
       gsap.to(window, {
         duration: 1,
-        scrollTo: { y: `#${section}` },
+        scrollTo: { y: `#${section}`, autoKill: true },
         ease: "power1.inOut",
-        autoKill: true,
       });
     },
     // initialaze animations and interactions

@@ -94,6 +94,12 @@ export default {
     ],
   }),
 
+  watch: {
+    imageClicked() {
+      ScrollTrigger.refresh(true);
+    },
+  },
+
   mounted() {
     this.$nextTick(() => {
       window.scrollTo(0, 0);

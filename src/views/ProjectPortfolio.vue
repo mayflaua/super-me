@@ -312,12 +312,7 @@ export default {
       &--first {
         position: relative;
         margin: 60px auto 0 auto;
-        transition: 1s ease-in-out;
 
-        &:hover {
-          transform: scale(1.1);
-          animation: 3s flicker infinite alternate;
-        }
         .project__desc-image-wrapper {
           position: absolute;
           width: 75vw;
