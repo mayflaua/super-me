@@ -36,6 +36,7 @@ export default {
 ::-webkit-scrollbar-thumb {
   background: $purple;
 }
+
 body {
   font-family: "Montserrat", sans-serif;
 }

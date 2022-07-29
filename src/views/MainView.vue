@@ -716,6 +716,7 @@ export default {
         duration: 1,
         scrollTo: { y: `#${section}` },
         ease: "power1.inOut",
+        autoKill: true,
       });
     },
     // initialaze animations and interactions
@@ -761,10 +762,6 @@ export default {
 /* main style */
 * {
   box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 .content {
@@ -1121,6 +1118,7 @@ html {
       position: relative;
       cursor: pointer;
       display: block;
+      text-decoration: none;
 
       width: 180px;
       margin: 4px 8px 0 0;
