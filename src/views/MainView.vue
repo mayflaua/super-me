@@ -199,6 +199,7 @@
             <input
               v-model="formName"
               class="input form__name"
+              :class="formSending ? 'form__name--formSending' : ''"
               type="text"
               name="name"
               required
@@ -230,6 +231,11 @@
                 v-model="formEmail"
                 type="email"
                 class="input form__email"
+                :class="
+                  formSending && selectedContactMethod == 'email'
+                    ? 'form__email--formSending'
+                    : ''
+                "
                 name="email"
                 required
                 @focus="selectedContactMethod = 'email'"
@@ -267,6 +273,11 @@
                 v-model="formTelegram"
                 type="text"
                 class="input form__telegram"
+                :class="
+                  formSending && selectedContactMethod == 'telegram'
+                    ? 'form__telegram--formSending'
+                    : ''
+                "
                 name="telegram"
                 required
                 @focus="selectedContactMethod = 'telegram'"
@@ -288,6 +299,7 @@
             <textarea
               v-model="formMessage"
               class="input form__message"
+              :class="formSending ? 'form__message--formSending' : ''"
               name="message"
               rows="4"
               required
@@ -298,10 +310,12 @@
             >
           </div>
           <back-button
+            v-if="!formSending"
             class="form__send-btn"
             text="ОТПРАВИТЬ"
             @click.prevent="sendForm"
           />
+          <form-loader v-if="formSending" class="form-loader" />
         </form>
       </div>
     </section>
@@ -322,8 +336,8 @@ import PagePreloader from "@/components/PagePreloader";
 gsap.registerPlugin(ScrollTrigger, ScrollTo);
 
 import BackButton from "@/components/BackButton";
+import FormLoader from "@/components/FormLoader";
 
-// let tl = gsap.timeline({ paused: true });
 let pageTl = gsap.timeline({ paused: true });
 
 export default {
@@ -332,6 +346,7 @@ export default {
     GlitchedWriter,
     PagePreloader,
     BackButton,
+    FormLoader,
   },
   data() {
     return {
@@ -349,6 +364,7 @@ export default {
       formMessage: "",
       formTelegram: "",
       selectedContactMethod: "email",
+      formSending: false,
 
       nameValid: true,
       emailValid: true,
@@ -464,6 +480,7 @@ export default {
   methods: {
     sendForm() {
       if (this.validateForm()) {
+        this.formSending = true;
         let data = $(".contact__form").serialize();
         data += `&method=${this.selectedContactMethod}`;
         $.ajax({
@@ -471,7 +488,7 @@ export default {
           method: "post",
           dataType: "html",
           data: data,
-          success: () => console.info("form sent"),
+          success: () => (this.formSending = false),
           error: () => console.log("form wasnt sent"),
         });
         this.formName = "";
@@ -735,16 +752,12 @@ export default {
 
 /* slide down arrow animations */
 @keyframes arrow {
-  0% {
-    opacity: 0;
-  }
   40% {
     opacity: 1;
   }
-  80% {
-    opacity: 0;
-  }
-  100% {
+  80%,
+  100%,
+  0% {
     opacity: 0;
   }
 }
@@ -1339,6 +1352,9 @@ export default {
         }
       }
       .form {
+        &-loader {
+          margin: 25px auto 0 auto;
+        }
         &__send-btn {
           margin: 25px auto 0 auto;
           width: 140px;
@@ -1363,6 +1379,17 @@ export default {
             top: -12px;
             font-size: 14px;
             color: $purple;
+          }
+
+          &--formSending {
+            animation: 0.3s border-flashing ease-in-out infinite alternate;
+            pointer-events: none;
+
+            @keyframes border-flashing {
+              to {
+                border-color: darken($purple, 30);
+              }
+            }
           }
         }
         &__name,
