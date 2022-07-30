@@ -8,11 +8,7 @@
 </template>
 
 <script>
-export default {
-  mounted() {
-    document.body.style.background = "#462572";
-  },
-};
+export default {};
 </script>
 
 <style lang="scss">
@@ -39,6 +35,7 @@ export default {
 
 body {
   font-family: "Montserrat", sans-serif;
+  background: $default-color;
 }
 
 /* neon flickering animation */

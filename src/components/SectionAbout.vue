@@ -376,4 +376,32 @@ export default {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .about {
+    &__main {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__basics {
+      width: 90%;
+      text-align: center;
+    }
+
+    &__cards {
+      width: 90%;
+    }
+
+    & .card__head {
+      font-size: 20px;
+      text-align: center;
+      text-indent: none;
+    }
+
+    & .card__content {
+      font-size: 16px;
+    }
+  }
+}
 </style>
