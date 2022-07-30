@@ -4,12 +4,12 @@
   <main class="content">
     <page-preloader v-if="isLoading" />
     <transition name="fade">
-      <page-menu v-if="helloAnimationDone" @clicked="goTo(anchor)"
+      <page-menu v-if="helloAnimationDone" @clicked="goTo"
     /></transition>
     <section-hello
       :is-mobile="isMobile"
       :is-loading="isLoading"
-      @said-hello="setScrolling(true)"
+      @said-hello="saidHello"
       @arrow-clicked="goTo('about')"
     />
 
@@ -480,7 +480,10 @@ export default {
 
       return results.every((el) => el);
     },
-
+    saidHello() {
+      this.helloAnimationDone = true;
+      this.setScrolling(true);
+    },
     applyAboutAnimations() {
       // title animation
       gsap.fromTo(

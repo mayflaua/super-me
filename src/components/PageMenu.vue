@@ -33,7 +33,12 @@
 </template>
 
 <script>
+import GlitchedWriter from "vue-glitched-writer";
+
 export default {
+  components: {
+    GlitchedWriter,
+  },
   emits: ["clicked"],
   data: () => ({
     menuAppearingOptions: {
@@ -44,6 +49,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/style/colors.scss";
+
 .menu {
   background-color: rgba($default-color, 0.7);
   position: fixed;
