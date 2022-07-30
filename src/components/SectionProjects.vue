@@ -1,26 +1,23 @@
 <template>
   <section id="projects" class="projects">
     <!-- TODO: make this title krasivoe -->
-    <div class="projects__title">
-      <svg class="circles" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-            <feOffset dx="5" dy="5" result="offsetblur" />
-            <feFlood flood-color="black" />
-            <feComposite in2="offsetblur" operator="in" />
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <circle class="circle circle1" r="30vw" cx="50%" cy="30vw" />
-        <circle class="circle circle2" r="20vw" cx="50%" cy="30vw" />
-        <circle class="circle circle3" r="10vw" cx="50%" cy="30vw" />
-      </svg>
-      Проекты
-    </div>
+    <svg class="circles" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+          <feOffset dx="5" dy="5" result="offsetblur" />
+          <feFlood flood-color="black" />
+          <feComposite in2="offsetblur" operator="in" />
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <circle class="circle circle1" r="35%" cx="50%" cy="30%" />
+      <circle class="circle circle2" r="22.5%" cx="50%" cy="30%" />
+      <circle class="circle circle3" r="10%" cx="50%" cy="30%" />
+    </svg>
     <div
       v-for="(project, num) in projects"
       :key="num"
@@ -148,45 +145,36 @@ export default {
   background: $dark-color;
   padding: 60px 0 0 0;
 
-  &__title {
-    font-weight: 600;
-    font-size: clamp(28px, 3vw, 40px);
-    text-align: center;
-    color: $purple;
-    position: relative;
-    text-shadow: 0 5px 2px black;
+  .circles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    overflow: visible;
 
-    .circles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      overflow: visible;
+    .circle {
+      fill: none;
+      stroke: $purple;
+      stroke-width: 5;
+      stroke-dasharray: 20% 0;
+      stroke-dashoffset: -20%;
+      stroke-opacity: 0.2;
+      animation: 60s circle ease-in infinite alternate;
+      filter: url(#shadow);
 
-      .circle {
-        fill: none;
-        stroke: $purple;
-        stroke-width: 5;
-        stroke-dasharray: 20% 0;
-        stroke-dashoffset: -20%;
-        stroke-opacity: 0.2;
-        animation: 60s circle ease-in infinite alternate;
-        filter: url(#shadow);
-
-        &2 {
-          animation-delay: 30%;
-          animation-direction: reverse;
-          animation-duration: 30s;
-        }
-        &3 {
-          animation-delay: -30%;
-          animation-duration: 40s;
-        }
-        @keyframes circle {
-          to {
-            stroke-dasharray: 0 200%;
-            stroke-dash-offset: 20%;
-          }
+      &2 {
+        animation-delay: 30%;
+        animation-direction: reverse;
+        animation-duration: 30s;
+      }
+      &3 {
+        animation-delay: -30%;
+        animation-duration: 40s;
+      }
+      @keyframes circle {
+        to {
+          stroke-dasharray: 0 200%;
+          stroke-dash-offset: 20%;
         }
       }
     }
