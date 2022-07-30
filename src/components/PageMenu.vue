@@ -5,6 +5,7 @@
         text="обо мне"
         tag="div"
         class="menu__list-item"
+        :class="currentSection == 'about' ? 'menu__list-item--current' : ''"
         preset="cosmic"
         :options="menuAppearingOptions"
         appear
@@ -14,6 +15,7 @@
         text="проекты"
         tag="div"
         class="menu__list-item"
+        :class="currentSection == 'projects' ? 'menu__list-item--current' : ''"
         preset="cosmic"
         :options="menuAppearingOptions"
         appear
@@ -23,6 +25,7 @@
         text="связаться"
         tag="div"
         class="menu__list-item"
+        :class="currentSection == 'contact' ? 'menu__list-item--current' : ''"
         preset="cosmic"
         :options="menuAppearingOptions"
         appear
@@ -38,6 +41,9 @@ import GlitchedWriter from "vue-glitched-writer";
 export default {
   components: {
     GlitchedWriter,
+  },
+  props: {
+    currentSection: { type: String, default: "" },
   },
   emits: ["clicked"],
   data: () => ({
@@ -58,7 +64,7 @@ export default {
   height: 50px;
   z-index: 99;
 
-  font-size: clamp(2vh, 16px, 3vw);
+  font-size: 1.8vh;
 
   &__list {
     height: 100%;
@@ -67,11 +73,20 @@ export default {
 
     &-item {
       position: relative;
-      transition: all 1s;
+      transition: all 1s ease;
       border-bottom: 1px solid transparent;
       line-height: 50px;
       text-align: center;
       cursor: pointer;
+      text-transform: uppercase;
+
+      &--current {
+        transform: translateY(25%);
+        font-size: 2.2vh;
+        color: $purple;
+        font-weight: 500;
+        background-color: rgba($light-color, 0.8);
+      }
 
       &:after {
         content: "";
