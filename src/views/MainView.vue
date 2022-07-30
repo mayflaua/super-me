@@ -318,6 +318,16 @@
           <form-loader v-if="formSending" class="form-loader" />
         </form>
       </div>
+      <transition name="modal">
+        <div v-show="thanksModalVisible" class="thanks-modal">
+          <div class="thanks-modal__title">Спасибо, форма отправлена.</div>
+          <div class="thanks-modal__subtitle">Вскоре я отвечу.</div>
+          <back-button
+            class="thanks-modal__close"
+            text="ЗАКРЫТЬ"
+            @click="hideThanksModal"
+          /></div
+      ></transition>
     </section>
   </main>
 </template>
@@ -365,6 +375,7 @@ export default {
       formTelegram: "",
       selectedContactMethod: "email",
       formSending: false,
+      thanksModalVisible: false,
 
       nameValid: true,
       emailValid: true,
@@ -478,6 +489,15 @@ export default {
   },
 
   methods: {
+    showThanksModal() {
+      this.formSending = false;
+      this.setScrolling(false);
+      this.thanksModalVisible = true;
+    },
+    hideThanksModal() {
+      this.setScrolling(true);
+      this.thanksModalVisible = false;
+    },
     sendForm() {
       if (this.validateForm()) {
         this.formSending = true;
@@ -488,7 +508,7 @@ export default {
           method: "post",
           dataType: "html",
           data: data,
-          success: () => (this.formSending = false),
+          success: () => this.showThanksModal(),
           error: () => console.log("form wasnt sent"),
         });
         this.formName = "";
@@ -769,6 +789,16 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.5s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  filter: blur(100px);
 }
 
 /* main style */
@@ -1472,6 +1502,40 @@ export default {
       line-height: 40px;
       color: $purple;
       font-weight: 600;
+    }
+  }
+
+  .thanks-modal {
+    width: clamp(200px, 70vw, 900px);
+    height: clamp(150px, 40vh, 400px);
+    position: fixed;
+    border: 3px solid $purple;
+    background: rgba($blue, 0.8);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px $purple;
+    z-index: 100;
+
+    &__title,
+    &__subtitle {
+      text-align: center;
+      width: 100%;
+      color: white;
+      font-weight: 600;
+    }
+
+    &__title {
+      margin: 30px 0 0 0;
+      font-size: clamp(24px, 1.5vw, 32px);
+    }
+    &__subtitle {
+      margin: 15px 0 0 0;
+      font-size: clamp(22px, 1.3vw, 30px);
+    }
+
+    &__close {
+      margin: 0 auto;
     }
   }
 }
