@@ -481,9 +481,6 @@ export default {
       width: 200%;
       height: 130%;
       position: absolute;
-      top: -30%;
-      bottom: -30%;
-      left: -50%;
 
       background: -webkit-linear-gradient($purple, transparent 2px),
         -webkit-linear-gradient(left, $purple, transparent 2px);

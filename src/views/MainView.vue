@@ -4,7 +4,10 @@
   <main class="content">
     <page-preloader v-if="isLoading" />
     <transition name="fade">
-      <page-menu v-if="helloAnimationDone" @clicked="goTo"
+      <page-menu
+        v-if="helloAnimationDone"
+        :current-section="currentSection"
+        @clicked="goTo"
     /></transition>
     <section-hello
       :is-mobile="isMobile"
@@ -58,6 +61,8 @@ export default {
       helloAnimationDone: false,
 
       isLoading: true,
+
+      currentSection: "",
     };
   },
 
@@ -77,6 +82,8 @@ export default {
         this.isLoading = false;
       }
     };
+
+    document.addEventListener("scroll", this.getCurrentSection);
   },
 
   activated() {
@@ -91,6 +98,41 @@ export default {
   },
 
   methods: {
+    getCurrentSection() {
+      const about = document.getElementById("about").getBoundingClientRect();
+      const projects = document
+        .getElementById("projects")
+        .getBoundingClientRect();
+      const contact = document
+        .getElementById("contact")
+        .getBoundingClientRect();
+
+      if (
+        about.y <= about.height / 2 &&
+        about.bottom >= about.height / 2 &&
+        this.currentSection != "about"
+      ) {
+        this.currentSection = "about";
+      }
+      if (
+        projects.y <= about.height / 2 &&
+        projects.bottom >= about.height / 2 &&
+        this.currentSection != "projects"
+      ) {
+        console.log("projects");
+        this.currentSection = "projects";
+      }
+      if (
+        contact.y <= contact.height / 2 &&
+        contact.bottom >= contact.height / 2 &&
+        this.currentSection != "contact"
+      ) {
+        console.log("contact");
+
+        this.currentSection = "contact";
+      }
+    },
+
     saidHello() {
       this.helloAnimationDone = true;
       this.setScrolling(true);
@@ -158,14 +200,5 @@ export default {
   background: $dark-color;
   color: white;
   overflow: auto;
-}
-
-@media (max-width: 500px) {
-  .button {
-    width: 120px;
-    &__text {
-      font-size: 14px;
-    }
-  }
 }
 </style>
