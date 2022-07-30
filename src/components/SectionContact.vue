@@ -131,6 +131,22 @@
           @click="hideThanksModal"
         /></div
     ></transition>
+    <div class="bg">
+      <div class="bg__line"></div>
+      <div class="links">
+        <a
+          href="https://github.com/mayflaua"
+          target="_blank"
+          class="link link--gh"
+        ></a>
+        <a
+          href="mailto:num1carbon@gmail.com"
+          target="_blank"
+          class="link link--email"
+        ></a>
+        <a href="https://t.me/pogas" target="_blank" class="link link--tg"></a>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -247,12 +263,16 @@ export default {
   width: 100%;
   min-height: 100vh;
   padding: 50px 0 0 0;
-  background: linear-gradient($dark-color, $blue);
+  background: $dark-color;
+  position: relative;
 
   &__form-wrapper {
     width: 60%;
     margin: 0 auto;
     .contact__form {
+      position: relative;
+      z-index: 2;
+
       display: flex;
       flex-direction: column;
 
@@ -335,6 +355,7 @@ export default {
   }
 
   &-method {
+    z-index: 2;
     display: flex;
     justify-content: space-between;
 
@@ -362,8 +383,8 @@ export default {
           height: 10px;
           border-radius: 50%;
           position: absolute;
-          top: 3px;
-          left: 3px;
+          top: 5px;
+          left: 5px;
           background: $purple;
           animation: 3s flicker infinite alternate;
 
@@ -418,19 +439,128 @@ export default {
       width: 100%;
       color: white;
       font-weight: 600;
+      margin: 0 10px;
     }
 
     &__title {
       margin: 30px 0 0 0;
-      font-size: clamp(24px, 1.5vw, 32px);
+      font-size: clamp(20px, 1.5vw, 32px);
     }
     &__subtitle {
       margin: 15px 0 0 0;
-      font-size: clamp(22px, 1.3vw, 30px);
+      font-size: clamp(18px, 1.3vw, 30px);
     }
 
     &__close {
       margin: 0 auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 10px;
+    }
+  }
+
+  .bg {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    perspective: 300px;
+    perspective-origin: 50% 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+    background: linear-gradient($dark-color 60%, $blue);
+
+    &__line {
+      width: 200%;
+      height: 130%;
+      position: absolute;
+      top: -30%;
+      bottom: -30%;
+      left: -50%;
+
+      background: -webkit-linear-gradient($purple, transparent 2px),
+        -webkit-linear-gradient(left, $purple, transparent 2px);
+      background-size: 100px 100px, 100px 100px;
+
+      transform: rotateX(60deg);
+      animation: 4s moving linear infinite;
+
+      box-shadow: 0 400px 1000px $dark-color inset;
+    }
+    @keyframes moving {
+      from {
+        background-position: 0px 0px, 0px 0px;
+      }
+      to {
+        background-position: 0px -100px, 0 100px;
+      }
+    }
+
+    .links {
+      position: relative;
+      z-index: 2;
+      width: 30%;
+      height: 100px;
+
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      perspective: 150px;
+
+      &:hover:before {
+        opacity: 1;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 32px;
+        background: $purple;
+
+        animation: 3s flicker infinite alternate;
+        transition: opacity 0.5s ease-out;
+
+        opacity: 0.7;
+
+        transform: rotateX(60deg);
+        transform-style: preserve-3d;
+      }
+
+      .link {
+        display: block;
+        width: 32px;
+        height: 32px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.8;
+        transition: opacity 0.3s ease, transform 0.5s ease-out;
+
+        &--gh {
+          background-image: url("@/assets/icons/github.png");
+        }
+        &--email {
+          background-image: url("@/assets/icons/email.png");
+        }
+        &--tg {
+          background-image: url("@/assets/icons/telegram.png");
+        }
+
+        &:hover {
+          opacity: 1;
+          transform: translateY(-5px);
+        }
+      }
     }
   }
 }
@@ -463,14 +593,29 @@ export default {
         display: none;
       }
     }
+    .bg {
+      perspective: 200px;
+    }
   }
 }
 
 @media (max-width: 500px) {
-  .contact__form {
-    .input-wrapper {
-      .input__label {
-        font-size: 14px !important;
+  .contact {
+    .contact__form {
+      .input-wrapper {
+        .input__label {
+          font-size: 14px !important;
+        }
+      }
+    }
+
+    .bg {
+      .links {
+        width: 60%;
+      }
+
+      &__line {
+        background-size: 100px 30px, 30px 100px;
       }
     }
   }
