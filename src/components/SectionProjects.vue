@@ -2,18 +2,6 @@
   <section id="projects" class="projects">
     <!-- TODO: make this title krasivoe -->
     <svg class="circles" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-          <feOffset dx="5" dy="5" result="offsetblur" />
-          <feFlood flood-color="black" />
-          <feComposite in2="offsetblur" operator="in" />
-          <feMerge>
-            <feMergeNode />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
       <circle class="circle circle1" r="35%" cx="50%" cy="30%" />
       <circle class="circle circle2" r="22.5%" cx="50%" cy="30%" />
       <circle class="circle circle3" r="10%" cx="50%" cy="30%" />
@@ -151,6 +139,7 @@ export default {
     height: 100%;
     left: 0;
     overflow: visible;
+    filter: drop-shadow(5px 5px 2px black);
 
     .circle {
       fill: none;
@@ -160,8 +149,6 @@ export default {
       stroke-dashoffset: -20%;
       stroke-opacity: 0.2;
       animation: 60s circle ease-in infinite alternate;
-      filter: url(#shadow);
-
       &2 {
         animation-delay: 30%;
         animation-direction: reverse;
