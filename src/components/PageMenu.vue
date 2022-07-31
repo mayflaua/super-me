@@ -81,9 +81,9 @@ export default {
       text-transform: uppercase;
 
       &--current {
-        transform: translateY(25%);
-        font-size: 2.2vh;
-        color: $purple;
+        // transform: translateY(5%);
+        font-size: 2.1vh;
+        // color: $purple;
         font-weight: 500;
         background-color: rgba($light-color, 0.8);
       }
