@@ -1,5 +1,9 @@
 <template>
-  <section id="contact" class="contact">
+  <section
+    id="contact"
+    class="contact"
+    @click="thanksModalVisible ? hideThanksModal() : null"
+  >
     <div class="contact__form-wrapper">
       <form action="" class="contact__form">
         <div class="input-wrapper">
@@ -426,7 +430,7 @@ export default {
     height: clamp(150px, 40vh, 400px);
     position: fixed;
     border: 3px solid $purple;
-    background: rgba($blue, 0.8);
+    background: rgba($blue, 0.95);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
