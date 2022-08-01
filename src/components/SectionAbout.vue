@@ -16,7 +16,9 @@
             {{ card.title }}
             <div class="card__head-overlay" />
           </div>
-          <div class="card__content" v-html="card.text.join(`<br />`)" />
+          <div class="card__content">
+            <div class="card__content-text" v-html="card.text.join(`<br />`)" />
+          </div>
         </div>
       </div>
     </div>
@@ -325,24 +327,25 @@ export default {
           }
           & ~ .card__content {
             max-height: 250px;
-            padding: 20px 10px;
             opacity: 1;
           }
         }
       }
 
       &__content {
-        transition: padding 0.7s ease, max-height 0.7s ease-out,
-          opacity 1s linear;
+        transition: max-height 0.7s ease-in-out, opacity 1s linear;
         font-size: 18px;
-        padding: 0 10px;
+
         opacity: 0;
         max-height: 0;
         overflow: hidden;
 
+        &-text {
+          padding: 20px 10px;
+        }
+
         &:hover {
           max-height: 250px;
-          padding: 20px 10px;
           opacity: 1;
         }
       }
