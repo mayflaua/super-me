@@ -99,6 +99,13 @@ export default {
         // highlights this card
         // current: true,
       },
+      {
+        route: "feelcomfy",
+        title: "FeelComfy",
+        desc: "Интернет магазин техники для программистов",
+        current: true,
+        link: "https://feelcomfy.netlify.app",
+      },
     ],
   }),
 

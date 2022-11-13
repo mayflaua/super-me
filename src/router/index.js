@@ -6,6 +6,7 @@ import ProjectPassGen from "@/views/ProjectPassGen.vue";
 import ProjectKitten from "@/views/ProjectKitten.vue";
 import ProjectGrocery from "@/views/ProjectGrocery.vue";
 import ProjectPortfolio3 from "@/views/ProjectPortfolio3.vue";
+import ProjectFeelComfy from "@/views/ProjectFeelComfy.vue";
 import PageNotFound from "@/views/PageNotFound.vue";
 
 const routes = [
@@ -50,6 +51,12 @@ const routes = [
     name: "portfolio3",
     component: ProjectPortfolio3,
     meta: { title: "Портфолио 3" },
+  },
+  {
+    path: "/feelcomfy",
+    name: "feelcomfy",
+    component: ProjectFeelComfy,
+    meta: { title: "FeelComfy" },
   },
   {
     path: "/:pathMatch(.*)*",
